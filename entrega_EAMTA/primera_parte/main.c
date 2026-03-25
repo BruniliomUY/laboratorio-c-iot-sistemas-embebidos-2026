@@ -3,5 +3,6 @@
 
 int main() {
     init_lab();
+    
     return 0;
 }
