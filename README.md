@@ -8,18 +8,3 @@ El laboratorio se divide en dos partes:
 
 - 🔹 Primera parte: Implementación de una librería general (`global.h`)
 - 🔹 Segunda parte: Implementación de una lista enlazada de estudiantes
-
----
-
-## 📂 Estructura del Proyecto
-
-La entrega debe respetar estrictamente la siguiente estructura:
-entrega_<grupo>/
-├── primera_parte/
-│ ├── global.h
-│ ├── global.c
-│ └── main.c
-└── segunda_parte/
-├── estudiantes.h
-├── estudiantes.c
-└── main.c
