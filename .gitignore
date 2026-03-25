@@ -1,0 +1,16 @@
+# 1. Ignorar absolutamente todo
+*
+
+# 2. Pero NO ignorar las carpetas (necesario para poder entrar en ellas)
+!*/
+
+# 3. NO ignorar los archivos que sí importan
+!*.c
+!*.h
+!*.md
+!Makefile
+!.gitignore
+
+# 4. (Opcional) Si quieres que ignore los ejecutables que se generan
+a.out
+*.exe
