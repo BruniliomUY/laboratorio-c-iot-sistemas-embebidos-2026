@@ -1,5 +1,6 @@
 #include "global.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
@@ -10,38 +11,38 @@ void init_lab(void) {
     printf("Bruno Moreira\n");
 }
 
-root_t eq_solver(coeff_t *coeficientes) {
-    root_t solucion;  // Asignamos var local para almacenar la solución
+root_t* eq_solver(coeff_t *coeficientes) {
+    root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
     
     double a = (double)coeficientes->a; // Convertimos a double para mayor precisión en el cálculo intermedio
     double b = (double)coeficientes->b;
     double c = (double)coeficientes->c;
 
-	double discriminante = coeficientes->b*coeficientes->b - 4*coeficientes->a*coeficientes->c;// Calculamos el discriminante.
-	double x1 = (-coeficientes->b + sqrt(discriminante)) / (2.0 * coeficientes->a);          // Calculamos la primera raíz usando el método de Bhaskara.
-	double x2 = (-coeficientes->b - sqrt(discriminante)) / (2.0 * coeficientes->a);          // Calculamos la segunda raíz usando el método de Bhaskara.
+	double discriminante = b*b - 4*a*c;// Calculamos el discriminante.
 
     //Segun el metodo de Bhaskara y el discriminante, asignamos los valores a la estructura de solución.
 	if (discriminante > 0) {
-        solucion.real1 = (int32_t)x1;
-        solucion.imag1 = 0;
-        solucion.real2 = (int32_t)x2;
-        solucion.imag2 = 0;
-        solucion.complex = false;
+        double x1 = (-b + sqrt(discriminante)) / (2.0 * a);          // Calculamos la primera raíz usando el método de Bhaskara.
+	    double x2 = (-b - sqrt(discriminante)) / (2.0 * a);          // Calculamos la segunda raíz usando el método de Bhaskara.
+        solucion->real1 = (int32_t)x1;                                 //  Se usa -> por que es a lo que apunta soulcion dentro de el espacio de está asignada la memoria para almacenar la solución.
+        solucion->imag1 = 0;
+        solucion->real2 = (int32_t)x2;
+        solucion->imag2 = 0;
+        solucion->complex = false;
 	} else if (discriminante < 0) {
-		solucion.real1 = (int32_t)(-b / (2.0 * a));
-        solucion.imag1 = (int32_t)(sqrt(-discriminante) / (2.0 * a));
-        solucion.real2 = (int32_t)(-b / (2.0 * a));
-        solucion.imag2 = (int32_t)(-sqrt(-discriminante) / (2.0 * a));
-        solucion.complex = true;
+		solucion->real1 = (int32_t)(-b / (2.0 * a));
+        solucion->imag1 = (int32_t)(sqrt(-discriminante) / (2.0 * a));
+        solucion->real2 = (int32_t)(-b / (2.0 * a));
+        solucion->imag2 = (int32_t)(-sqrt(-discriminante) / (2.0 * a));
+        solucion->complex = true;
 	} else {
-		solucion.real1 = (int32_t)(-b / (2.0 * a));
-        solucion.imag1 = 0;
-        solucion.real2 = (int32_t)(-b / (2.0 * a));
-        solucion.imag2 = 0;
-        solucion.complex = false;
+		solucion->real1 = (int32_t)(-b / (2.0 * a));
+        solucion->imag1 = 0;
+        solucion->real2 = (int32_t)(-b / (2.0 * a));
+        solucion->imag2 = 0;
+        solucion->complex = false;
 	}
-    return solucion;  
+    return solucion;  // Retornamos la solución calculada, hay que liberar la memoria asignada por el llamador de esta función para evitar fugas de memoria.
 }
 
 int32_t bin2dec(char *binary,bool sign) {
@@ -72,7 +73,7 @@ void print_reverse_array(void *array,size_t data_type,size_t array_size) {
 void max_index(void *array, size_t data_type, size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
     int32_t max_val = *(int32_t *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
-    size_t  max_indx = 0;                                      //Definimos variable para almacenar el indice.
+    int  max_indx = 0;                                      //Definimos variable para almacenar el indice.
              
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
@@ -89,7 +90,7 @@ void max_index(void *array, size_t data_type, size_t array_size) {
 void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
     uint8_t *pa = (uint8_t *)array;                            
     int32_t min_val = *(int32_t *)pa;                          
-    size_t  min_indx = 0;                                      
+    int  min_indx = 0;                                      
 
     for (size_t i = 1; i < array_size; i++){                    
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  
@@ -103,30 +104,24 @@ void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a m
         printf("Valor min: %d\n", min_val);
     }
 
-matriz_t matrix_sub (matriz_t A,matriz_t B){
+matriz_t *matrix_sub (matriz_t A,matriz_t B){
     size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
     size_t n_columna = A.cols;
 
-    matriz_t matriz_error;               //Definimos una matriz de error para retornar en caso de que las dimensiones de las matrices no sean compatibles para la resta.
-    matriz_error.rows = 0;
-    matriz_error.cols = 0;
-    matriz_error.data = NULL;            //Def NULL para respresentar la matriz de error.
-
-
     if (n_filas != B.rows || n_columna != B.cols) {
-        return matriz_error;              // Retorna la matriz de error si las dimensiones no coinciden
+        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
     }
  
-	matriz_t matriz_resultado;           //Definimos matriz resiltado.
-    matriz_resultado.rows = n_filas;
-    matriz_resultado.cols = n_columna;
+	matriz_t *matriz_resultado = malloc(sizeof(matriz_t)); //Asignamos memoria para la matriz resultado.
+    matriz_resultado->rows = n_filas;
+    matriz_resultado->cols = n_columna;
     
 	for (int i = 0; i < n_filas; i++) {  //Recorremos las 2 matrices y las restamos con 2 for anidados.
 		for (int j = 0; j < n_columna; j++) {
-			matriz_resultado.data[i][j] = A.data[i][j] - B.data[i][j];
+			matriz_resultado->data[i][j] = A.data[i][j] - B.data[i][j];
 		}
 	}
-	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices.
-}
+	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices
+}                                       //Importante liberar la memoria asignada.
  
 

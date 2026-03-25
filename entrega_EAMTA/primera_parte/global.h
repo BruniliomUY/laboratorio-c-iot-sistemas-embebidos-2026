@@ -34,7 +34,7 @@ typedef struct {
    ========================================== */
 void init_lab(void); //Imprime los nombres de los integrantes del grupo. 
 
-root_t eq_solver(coeff_t *coeficientes ); //Recibe un arreglo de coeficientes y devuelve un arreglo con las raíces de la ecuación.
+root_t* eq_solver(coeff_t *coeficientes ); //Recibe un arreglo de coeficientes y devuelve un arreglo con las raíces de la ecuación.
 
 int32_t bin2dec(char *binary,bool sign);  //Recibe un número binario en formato string y un booleano que indica si el número es con signo o sin signo, y devuelve su equivalente en decimal.
 
@@ -44,6 +44,6 @@ void max_index(void *array, size_t data_type, size_t array_size); //Imprime el �
 
 void min_index(void *array, size_t data_type, size_t array_size); //Imprime el índice y valor mínimo del array.
 
-matriz_t matrix_sub (matriz_t A,matriz_t B); //Recibe dos matrices A y B, y devuelve la matriz resultante de restar B a A.
+matriz_t* matrix_sub (matriz_t A,matriz_t B); //Recibe dos matrices A y B, y devuelve la matriz resultante de restar B a A.
 
 #endif // GLOBAL_H
