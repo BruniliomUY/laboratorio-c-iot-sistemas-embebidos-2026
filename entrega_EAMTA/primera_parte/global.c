@@ -4,13 +4,6 @@
 #include <string.h>
 #include <math.h>
 
-void init_lab(void) {
-    printf("Integrantes del grupo:\n");
-    printf("Nicolas Mayer\n");
-    printf("Victoria Amor\n");
-    printf("Bruno Moreira\n");
-}
-
 root_t* eq_solver(coeff_t *coeficientes) {
     root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
     
@@ -73,7 +66,7 @@ void print_reverse_array(void *array,size_t data_type,size_t array_size) {
 void max_index(void *array, size_t data_type, size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
     int32_t max_val = *(int32_t *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
-    int  max_indx = 0;                                      //Definimos variable para almacenar el indice.
+    int  max_indx = 0;   $//VER                                    //Definimos variable para almacenar el indice.
              
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
@@ -90,7 +83,7 @@ void max_index(void *array, size_t data_type, size_t array_size) {
 void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
     uint8_t *pa = (uint8_t *)array;                            
     int32_t min_val = *(int32_t *)pa;                          
-    int  min_indx = 0;                                      
+    int  min_indx = 0;        $//VER                                  
 
     for (size_t i = 1; i < array_size; i++){                    
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  
