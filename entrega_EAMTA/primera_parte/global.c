@@ -1,8 +1,11 @@
 #include "global.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+
 
 root_t* eq_solver(coeff_t *coeficientes) {
     root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
