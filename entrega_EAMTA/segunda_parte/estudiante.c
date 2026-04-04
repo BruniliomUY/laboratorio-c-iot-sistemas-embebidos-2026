@@ -1,4 +1,65 @@
 #include "estudiante.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+node *head = NULL;
+
+void agregar_estudiante(char nombre[64],char apellido[64],uint32_t ci,uint8_t grado,float promedio){
+    node *nuevo = malloc(sizeof(node));
+    if (nuevo == NULL) return;
+
+    strcpy(nuevo->data.nombre, nombre);
+    strcpy(nuevo->data.apellido, apellido);
+    nuevo->data.ci = ci;
+    nuevo->data.grado = grado;
+    nuevo->data.promedio = promedio;
+
+    nuevo->link = head;
+    head = nuevo;
+}
+
+void elimina_estudiante(uint32_t ci){
+    node *ptr = head; // Declaramos ptr y lo igualamos al inicio
+    node *anterior = NULL;
+    // Caso 1: La lista está vacía
+    if (head == NULL) return;
+    // Caso 2: El estudiante a eliminar es el primero (el head)
+    if (ptr != NULL && ptr->data.ci == ci) {
+        head = ptr->link; // El segundo pasa a ser el primero
+        free(ptr);        // Liberamos la memoria del nodo eliminado
+        return;
+    }
+    // Caso 3: Buscar el estudiante en el resto de la lista
+    while (ptr != NULL && ptr->data.ci != ci) {
+        anterior = ptr;    // Guardamos el actual como anterior
+        ptr = ptr->link;   // Avanzamos al siguiente
+    }
+    // Si ptr es NULL, es porque recorrimos toda la lista y no encontramos la CI
+    if (ptr == NULL) {
+        printf("Estudiante con CI %u no encontrado.\n", ci);
+        return;
+    }
+    // "Saltamos" el nodo actual conectando el anterior con el siguiente
+    anterior->link = ptr->link;
+    
+    // Liberamos la memoria para evitar fugas (memory leaks)
+    free(ptr);
+    }
+void mostrar_lista() {
+    node *ptr = head; // Declaramos ptr y lo igualamos al inicio
+    while (ptr != NULL) {
+        printf("Nombre: %s | Apellido: %s | CI: %u | Grado: %hhu | Promedio: %.2f\n", 
+               ptr->data.nombre, 
+               ptr->data.apellido, 
+               ptr->data.ci, 
+               ptr->data.grado, 
+               ptr->data.promedio);
+        ptr = ptr->link; // Avanzamos al siguiente nodo
+    }
+}
 
 /*
 ****************************************************************
@@ -150,43 +211,6 @@ int insertar_estudiante(nodo_t **cabeza, estudiante_t estudiante)//el puntero do
       0 si lo elimino correctamente, -1 si no lo encontro o hubo error
 =========================
 */
-int eliminar_estudiante(nodo_t **cabeza, uint32_t ci)//se usa doble puntero proque capaz hay que cambiar el primer nodo si este se tiene que eliminar
-{
-    nodo_t *actual;
-    nodo_t *anterior;
-
-    if (cabeza == NULL || *cabeza == NULL)//chequea si la direccion del puntero cabeza no es valida o si la lista esta vacia 
-    {
-        return -1;
-    }
-
-    actual = *cabeza;
-    anterior = NULL;
-
-    while (actual != NULL && actual->estudiante.ci != ci)//mientras no se llegue al final d ela lista y no se encuentre la cedula se avanza
-    {
-        anterior = actual;
-        actual = actual->siguiente;
-    }
-
-    if (actual == NULL)//si se salio del while porque se llego al final de la lista es porque no encontro la cedula 
-    {
-        return -1;
-    }
-
-    if (anterior == NULL)//si "anterior" quedo en null como se definio al incio es porque el nodo a borrar es el primero y la cabeza ya no es ese priemr nodo sino el nodo siguiente
-    {
-        *cabeza = actual->siguiente;
-    }
-    else
-    {
-        anterior->siguiente = actual->siguiente;//el nodo no es el del incio entonces como que se saltea el nodo ,el nodo anterior en su atributo siguiente pasa a ser el siguiente del nodo actual.Este nodo actual es el que se elimina
-    }
-
-    free(actual);//se libera  el espacio de memoria que ocupa el nodo "actual" proque ya no se necesita ,se elimina el nodo
-
-    return 0;
-}
 
 /*
 =========================

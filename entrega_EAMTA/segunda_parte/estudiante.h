@@ -1,10 +1,8 @@
-#ifndef ESTUDIANTES_H
-#define ESTUDIANTES_H
-
+#ifndef  ESTUDIANTE_H
+#define  ESTUDIANTE_H
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
+#include <stdlib.h>
 
 /*
 =========================
