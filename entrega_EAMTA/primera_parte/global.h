@@ -4,9 +4,17 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-/* ==========================================
-   1. DEFINICIÓN DE TIPOS 
-   ========================================== */
+typedef struct { //defino la estructura de un numero imaginario
+    int32_t real;
+    int32_t imag;
+} complex_t;
+
+typedef struct {
+    int8_t day;
+    int8_t month;
+    int16_t year;
+} date_t;
+
 typedef struct { //Coeficientes de la ecuación de segundo grado.
     int32_t  a;  //Coeficiente del término cuadrático.
     int32_t  b;  //Coeficiente del término lineal.
@@ -59,5 +67,15 @@ int32_t string_length(char *string);
 int32_t string_words(char *string);
 
 int string_copy(char *source, char *destination);
+
+int find_in_string(char *haystack, char *needle);
+
+void string_to_caps(char *string);
+
+void string_to_mins(char *string);
+
+complex_t *sum(complex_t a, complex_t b);
+
+complex_t *prod(complex_t a, complex_t b);
 
 #endif //eso que dijo el profesor que es buena practica definir con if not def,tuve que buscar y hay que cerrarlo asi 
