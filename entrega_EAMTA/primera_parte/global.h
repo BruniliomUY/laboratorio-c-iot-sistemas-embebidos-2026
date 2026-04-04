@@ -49,7 +49,7 @@ typedef struct matriz_t
    declaraciones de las funciones print_<tipo> para mostrar la info de cada estructura
    ========================= */
 
-void print_coeff_t(coeff_t coef); //coen el _t o no??
+void print_coeff_t(coeff_t coef); 
 void print_root_t(root_t root);
 void print_complex_t(complex_t c);
 void print_date_t(date_t date);

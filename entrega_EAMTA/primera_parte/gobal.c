@@ -34,11 +34,11 @@ void init_lab(void)
       0 si el swapeo se realizo correctamente, -1 si hubo algun error
 =========================
 */
-int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para que las variabels sean de distinto tipo porque hay un solo parametro size_t data_type que guarda cuantos bytes ocupa el dato
+int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para que las variabels sean de distinto tama;o porque hay un solo parametro size_t data_type que guarda cuantos bytes ocupa el dato
 //El pdf aclara:Las funciones que reciben void* deben usar el parámetro data_type
 //(sizeof del tipo) para aritmética de punteros. Osea que no se sabe que tipo de dato es solo el tama;o que ocupa
 {
-    char *a;//char porque ocupa un byte para cambiar los elementos byte a byte
+    char *a;//porque ocupa un byte para cambiar los elementos byte a byte (la undiad mas chica para direccionar memoria no puedo ir de a medio byte digamos)
     char *b;
     char temp;
 
@@ -46,8 +46,8 @@ int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para 
     {
         return -1;
     }
-
-    a = (char *)elem_1;//para que quede un puntero que apunte de a bytes porque con void* no sabes el tipo de dato osea no sabe el puntero de que tipo de dato esta recorriendo ,de a cuantos bytes avanzar
+    //void *elem_ es un puntero sin tipo no se de a cuantos bytes se mueve el puntero entonces no puedo hacer elem_1[i]
+    a = (char *)elem_1;//esto es un casteo para que a apunte a la misma direccion que elem_1 pero movineo el puntero de a bytes,con vpid *elem_ anda a saber de a cuantos bytes es el puntero original elem_
     b = (char *)elem_2;
 
     for (int i = 0; i < data_type; i++)
@@ -72,25 +72,33 @@ int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para 
 */
 int consonantes(char *string)
 {
-    int consonantes = 0;
+    int contador = 0;
+    char *consonantes = "bcdfghjklmnñpqrstvwxyzBCDFGHJKLMNÑPQRSTVWXYZ";
 
-    if (string == NULL)//si el puntero no apunta a nada valido
+    if (string == NULL)
+        return -1;//si el puntero no apunta a una direccion valida
+
+    while (*string != '\0')//recorro la string
     {
-        return -1;
+        int es_consonante = 0;//flag
+
+        for (int i = 0; consonantes[i] != '\0'; i++)//recorro la "lista" de consonantes
+        {
+            if (*string == consonantes[i])//si mi caracter actual es igual a una consonante de la "lista"
+            {
+                es_consonante = 1; // marco que es consonante activando la flag
+            }
+        }
+
+        if (es_consonante == 1)
+        {
+            contador++; 
+        }
+
+        string++;
     }
 
-    while (*string != '\0')//mientras que no se llegue al final de la string
-    {
-    if (((*string >= 'a' && *string <= 'z') || (*string >= 'A' && *string <= 'Z'))   &&    !(*string == 'a' || *string == 'e' || *string == 'i' || *string == 'o' || *string == 'u' || *string == 'A' || *string == 'E' || *string == 'I' || *string == 'O' || *string == 'U'))
-    //basicamente si el valor al que apunta el puntero es una letra y no es una vocal entonces es una consonante
-    //Como dijimos en clase los caracteres en C se guardan con su numero ascii correspondiente. Entonces si el valor del puntero es mayor igual al numero en ascii de a y menor al de z estamos en el rango de las letras minusculas (a=97 y z=122) y la msima logica para las mayusuclas (65-90)
-    {
-        consonantes++;//suma uno al contador de consonantes
-    }
-    string++;//suma uno al puntero para que apunte al proximo byte (caracter)
-}
-
-    return consonantes;
+    return contador;
 }
 
 /*
@@ -114,11 +122,11 @@ int vocales(char *string)
 
     while (*string != '\0')
     {
-        if (*string == 'a' || *string == 'e' || *string == 'i' || *string == 'o' || *string == 'u' || *string == 'A' || *string == 'E' || *string == 'I' || *string == 'O' || *string == 'U')//si el valor al que apunta el puntero e suna voca. en mayusucla o minuscula suma uno al contador
+        if (*string == 'a' || *string == 'e' || *string == 'i' || *string == 'o' || *string == 'u' || *string == 'A' || *string == 'E' || *string == 'I' || *string == 'O' || *string == 'U')//si el valor al que apunta el puntero e suna vocla en mayusucla o minuscula suma uno al contador
         {
             vocales++;
         }
-        string++;//equivalente a string = string+1 osea avanza al proximo caracter del array
+        string++;//equivalente a string = string + 1 osea avanza al proximo caracter del array
     }
 
     return vocales;
@@ -127,7 +135,7 @@ int vocales(char *string)
 /*
 =========================
   reverse_string:
-  retorna una copia invertida de la string recibida
+  retorna una copia invertida del string recibido
   parametros:
       string: cadena a invertir
   retorno:
@@ -135,9 +143,9 @@ int vocales(char *string)
       o NULL si hubo error
 =========================
 */
-char * reverse_string(char *string)
+char * reverse_string(char *string)//la funcion pide reotrnar un puntero char a la string alreves
 {
-    int largo = 0;//podria dar problema si la string tuviera mas caracteres de los que puede almacenar un int (4bytes como 2 mil millones de caracteres igual)
+    int largo = 0;//daria problema ponerlo como int si la string tiene mas de 2millones de caracteres ,numero que no se puede guardar en 4 bytes
     int i = 0;
     char *alreves;//puntero donde guardar la string invertida
 
@@ -160,12 +168,12 @@ char * reverse_string(char *string)
     {
         return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
     }
+    //string orden = 012345
     while (string[i] != '\0')
     {
         alreves[largo - 1 - i] = string[i];//empiezo en largo - 1 para que deje el ultimo caracter libre para cerrar la string con \0
         i++;
     }
-//string orden = 012345
     alreves[largo] = '\0';//agrego el final de la string a mano 
 
     return alreves;
@@ -215,7 +223,7 @@ int32_t string_words(char *string)
     char *inicio = string;//pongo  un puntero que apunte al primer caracter de la string
     int32_t palabras = 0;
 
-    if (string == NULL) // si el puntero no apunta a nada
+    if (string == NULL) // si el putnero no apunta a nada
     {
         return -1;
     }
@@ -244,15 +252,16 @@ int32_t string_words(char *string)
       0 si la copia fue correcta, -1 si hubo error
 ========================
 */
-int string_copy(char *source, char *destination)
+int string_copy(char *source, char *destination)//ojo esto no te asegura que el destino tenga espacio para guardar los caracteres del source.Se supone que se reservo al memoria dinamica suficiente (para el /0 dle final y todo)
+//Deberia haber un parametro del tama;o del destino 
 {
     int i = 0;
 
-    if (source == NULL || destination == NULL)//si alguno de los dos punteros no apunta a nada osea si hay un error con ellos devuelve -1
+    if (source == NULL || destination == NULL )//si alguno de los dos punteros no apunta a nada osea si hay un error con ellos devuelve -1
     {
         return -1;
     }
-
+//sizeof punteros 
     while (source[i] != '\0')
     {
         destination[i] = source[i];//copia caracter por caracter
@@ -266,7 +275,7 @@ int string_copy(char *source, char *destination)
 
 /*
 =========================
-  print_coeff_t:
+  print_coeff:
   imprime todos los atributos de una variable de tipo coeff_t
   parametros:
       coef: estructura con los coeficientes a, b y c
@@ -281,7 +290,7 @@ void print_coeff_t(coeff_t coef)
 
 /*
 =========================
-  print_root_t:
+  print_root:
   imprime todos los atributos de una variable de tipo root_t
   parametros:
       root: estructura con las dos raices y si son complejas o no
@@ -297,7 +306,7 @@ void print_root_t(root_t root)
 
 /*
 =========================
-  print_complex_t:
+  print_complex:
   imprime todos los atributos de una variable de tipo complex_t
   parametros:
       c: estructura con parte real e imaginaria
@@ -312,7 +321,7 @@ void print_complex_t(complex_t c)
 
 /*
 =========================
-  print_date_t:
+  print_date:
   imprime todos los atributos de una variable de tipo date_t
   parametros:
       date: estructura con dia, mes y anio
@@ -337,15 +346,33 @@ void print_date_t(date_t date)
 */
 void print_matriz_t(matriz_t matriz)
 {
-    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
-    // %zu se usa para imprimir variables de tipo size_t (tamaños)
-
-  for (int i = 0; i < matriz.rows; i++) //recorre filas
+    if (matriz.data == NULL)
     {
-        for (int j = 0; j < matriz.cols; j++) //recorre columnas
+        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
+        return;
+    }
+
+    if (matriz.rows <= 0 || matriz.cols <= 0)
+    {
+        printf("Error: dimensiones invalidas\n");
+        return;
+    }
+
+    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
+
+    for (int i = 0; i < matriz.rows; i++)// recorre filas
+    {
+        if (matriz.data[i] == NULL)
         {
-            printf("%d ", matriz.data[i][j]); // imprimo cada numero de la matriz
+            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
+            return;
         }
-        printf("\n"); 
+
+        for (int j = 0; j < matriz.cols; j++)// recorre columnas
+        {
+            printf("%d ", matriz.data[i][j]);// imprimo cada numero
+        }
+
+        printf("\n");
     }
 }
