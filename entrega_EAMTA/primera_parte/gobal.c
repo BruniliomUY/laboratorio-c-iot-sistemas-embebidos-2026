@@ -275,7 +275,7 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
 
 /*
 =========================
-  print_coeff:
+  print_coeff_t:
   imprime todos los atributos de una variable de tipo coeff_t
   parametros:
       coef: estructura con los coeficientes a, b y c
@@ -290,7 +290,7 @@ void print_coeff_t(coeff_t coef)
 
 /*
 =========================
-  print_root:
+  print_root_t:
   imprime todos los atributos de una variable de tipo root_t
   parametros:
       root: estructura con las dos raices y si son complejas o no
@@ -306,7 +306,7 @@ void print_root_t(root_t root)
 
 /*
 =========================
-  print_complex:
+  print_complex_t:
   imprime todos los atributos de una variable de tipo complex_t
   parametros:
       c: estructura con parte real e imaginaria
@@ -321,7 +321,7 @@ void print_complex_t(complex_t c)
 
 /*
 =========================
-  print_date:
+  print_date_t:
   imprime todos los atributos de una variable de tipo date_t
   parametros:
       date: estructura con dia, mes y anio
@@ -336,7 +336,7 @@ void print_date_t(date_t date)
 
 /*
 =========================
-  print_matriz:
+  print_matriz_t:
   imprime todos los atributos de una variable de tipo matriz_t
   parametros:
       matriz: estructura con los datos de la matriz, cantidad de filas y columnas
