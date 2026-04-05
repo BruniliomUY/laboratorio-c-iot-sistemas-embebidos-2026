@@ -62,8 +62,59 @@ int main() {
     free(m1);
     free(m2);
 
-    // Falta Parte de Victoria
+    /* ===== swap ===== */
+    int a = 5, b = 10;
+    printf("Swap 1:\n");
+    printf("Antes: a=%d, b=%d\n", a, b);
+    swap(&a, &b, sizeof(int));
+    printf("Despues: a=%d, b=%d\n\n", a, b);
 
+    int c = 7;
+    printf("Swap 2:\n");
+    swap(&c, &c, sizeof(int)); /* mismo elemento */
+    printf("c=%d\n\n", c);
+
+    /* ===== strings ===== */
+    char texto1[] = "estoy testeando";
+    char texto2[] = "     deberia   andar!      ";  /* varios espacios */
+
+    printf("Texto 1: \"%s\"\n", texto1);
+    printf("Consonantes: %d\n", consonantes(texto1));
+    printf("Vocales: %d\n", vocales(texto1));
+    printf("Largo: %d\n", string_length(texto1));
+    printf("Palabras: %d\n\n", string_words(texto1));
+
+    printf("Texto 2: \"%s\"\n", texto2);
+    printf("Consonantes: %d\n", consonantes(texto2));
+    printf("Vocales: %d\n", vocales(texto2));
+    printf("Largo: %d\n", string_length(texto2));
+    printf("Palabras: %d\n\n", string_words(texto2));
+
+    /* ===== reverse ===== */
+    char *inv1 = reverse_string(texto1);
+    printf("Reverse 1: \"%s\"\n", inv1);
+    free(inv1);
+
+    char texto3[] = "a";
+    char *inv2 = reverse_string(texto3); /* un solo caracter */
+    printf("Reverse 2: \"%s\"\n\n", inv2);
+    free(inv2);
+
+    /* ===== string_copy ===== */
+    char destino1[50];
+    string_copy(texto1, destino1);
+    printf("Copy 1: \"%s\"\n", destino1);
+
+    char origen2[] = "";
+    char destino2[10];
+    string_copy(origen2, destino2); /* string vacia */
+    printf("Copy 2: \"%s\"\n\n", destino2);
+
+    /* ===== NULL ===== */
+    printf("Consonantes(NULL): %d\n", consonantes(NULL));
+    printf("Vocales(NULL): %d\n", vocales(NULL));
+    printf("Largo(NULL): %d\n", string_length(NULL));
+    printf("Palabras(NULL): %d\n", string_words(NULL));
 
     //Prueba de find_in_string
     printf("%d\n", find_in_string("Nicolas", "as"));
@@ -77,9 +128,9 @@ int main() {
     string_to_mins(string_a_convertir_a_mins);
 
     //prueba de sum
-    complex_t a = {1, 2};
-    complex_t b = {3, 4};
-    complex_t *result = sum(a, b);
+    complex_t a_c = {1, 2};
+    complex_t b_c = {3, 4};
+    complex_t *result = sum(a_c, b_c);
     printf("Resultado: %d + %di\n", result->real, result->imag);
     //O
     complex_t *result2 = sum((complex_t){1, 2}, (complex_t){3, 4});
@@ -88,9 +139,9 @@ int main() {
     free(result2);
 
     //prueba de prod
-    complex_t c = {1, 2};
-    complex_t d = {3, 4};
-    complex_t *result3 = prod(c, d);
+    complex_t c_c = {1, 2};
+    complex_t d_c = {3, 4};
+    complex_t *result3 = prod(c_c, d_c);
     printf("Resultado: %d + %di\n", result3->real, result3->imag);
     free(result3);
     //O
