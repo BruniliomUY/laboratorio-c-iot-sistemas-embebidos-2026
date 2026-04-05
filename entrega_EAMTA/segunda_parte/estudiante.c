@@ -107,7 +107,7 @@ void elimina_estudiante(nodo_t **cabeza,uint32_t ci){
     if (*cabeza == NULL) return;
     // Caso 2: El estudiante a eliminar es el primero (el head)
     if (ptr != NULL && ptr->data.ci == ci) {
-        head = ptr->link; // El segundo pasa a ser el primero
+        *cabeza = ptr->link; // El segundo pasa a ser el primero
         free(ptr);        // Liberamos la memoria del nodo eliminado
         return;
     }

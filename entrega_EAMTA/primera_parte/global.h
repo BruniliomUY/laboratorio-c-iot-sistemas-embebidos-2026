@@ -7,15 +7,15 @@
 /* ==========================================
    1. TIPOS DE DATOS 
    ========================================== */
-typedef struct { //defino la estructura de un numero imaginario
-    int32_t real;
-    int32_t imag;
+typedef struct {  //defino la estructura de un numero imaginario
+    int32_t real; //Parte real del número complejo.
+    int32_t imag; //Parte imaginaria del número complejo.
 } complex_t;
 
 typedef struct {
-    int8_t day;
-    int8_t month;
-    int16_t year;
+    int8_t day;   // Día del mes (1-31)
+    int8_t month; // Mes del año (1-12)
+    int16_t year; // Año (por ejemplo, 2024)
 } date_t;
 
 typedef struct { //Coeficientes de la ecuación de segundo grado.
@@ -51,7 +51,7 @@ void print_complex_t(complex_t c);
 
 void print_date_t(date_t date);
 
-void print_matriz_t(matriz_t matriz);
+void print_matriz_t(matriz_t matriz); 
 
 void init_lab(void); //Imprime los nombres de los integrantes del grupo. 
 
@@ -90,5 +90,13 @@ void string_to_mins(char *string);
 complex_t *sum(complex_t a, complex_t b);
 
 complex_t *prod(complex_t a, complex_t b);
+
+int chequear_si_bisiesto(int año);
+
+int largo_del_mes(int month, int year);
+
+int lo_que_va_del_año(date_t fecha);
+
+int days_left(date_t start, date_t finish);
 
 #endif //eso que dijo el profesor que es buena practica definir con if not def,tuve que buscar y hay que cerrarlo asi 

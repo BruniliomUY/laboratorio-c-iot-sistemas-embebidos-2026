@@ -113,8 +113,6 @@ int main() {
     //O
     printf("Dias restantes: %d\n", days_left((date_t){27, 5, 0}, (date_t){27, 5, 9999}));
     
-
-
     return 0;
 }
 
