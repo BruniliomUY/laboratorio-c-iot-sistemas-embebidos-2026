@@ -113,7 +113,9 @@ int consonantes(char *string)
 */
 int vocales(char *string)
 {
-    int vocales = 0;
+    int contador = 0;
+
+    char *vocales = "aeiouAEIOUáéíóúÁÉÍÓÚ";
 
     if (string == NULL)
     {
@@ -122,14 +124,25 @@ int vocales(char *string)
 
     while (*string != '\0')
     {
-        if (*string == 'a' || *string == 'e' || *string == 'i' || *string == 'o' || *string == 'u' || *string == 'A' || *string == 'E' || *string == 'I' || *string == 'O' || *string == 'U')//si el valor al que apunta el puntero e suna vocla en mayusucla o minuscula suma uno al contador
+        int es_vocal = 0;
+
+        for (int i = 0; vocales[i] != '\0'; i++)
         {
-            vocales++;
+            if (*string == vocales[i])
+            {
+                es_vocal = 1;
+            }
         }
-        string++;//equivalente a string = string + 1 osea avanza al proximo caracter del array
+
+        if (es_vocal == 1)
+        {
+            contador++;
+        }
+
+        string++;
     }
 
-    return vocales;
+    return contador;
 }
 
 /*
