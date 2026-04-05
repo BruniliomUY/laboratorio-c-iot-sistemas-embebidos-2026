@@ -1,7 +1,9 @@
 #include "global.h"
-
-#include <stdio.h>//para los printf
-#include <stdlib.h>//para la memoria dinamica
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <math.h>
 
 /*
 =========================
@@ -24,6 +26,184 @@ void init_lab(void)
 
 /*
 =========================
+ root_t* eq_solver:
+   resuelve la ecuacion de segundo grado dada por los coeficientes a, b y c usando el metodo de Bhaskara
+   y devuelve un puntero a una estructura root_t con las soluciones reales o complejas segun corresponda
+  parametros:
+      coeficientes: puntero a una estructura coeff_t con los coeficientes a, b y c de la ecuacion
+  retorno:
+      puntero a una estructura root_t con las soluciones reales o complejas segun corresponda
+=========================
+*/
+root_t* eq_solver(coeff_t *coeficientes) {
+    root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
+    
+    double a = (double)coeficientes->a; // Convertimos a double para mayor precisión en el cálculo intermedio
+    double b = (double)coeficientes->b;
+    double c = (double)coeficientes->c;
+
+	double discriminante = b*b - 4*a*c;// Calculamos el discriminante.
+
+    //Segun el metodo de Bhaskara y el discriminante, asignamos los valores a la estructura de solución.
+	if (discriminante > 0) {
+        double x1 = (-b + sqrt(discriminante)) / (2.0 * a);          // Calculamos la primera raíz usando el método de Bhaskara.
+	    double x2 = (-b - sqrt(discriminante)) / (2.0 * a);          // Calculamos la segunda raíz usando el método de Bhaskara.
+        solucion->real1 = (int32_t)x1;                                 //  Se usa -> por que es a lo que apunta soulcion dentro de el espacio de está asignada la memoria para almacenar la solución.
+        solucion->imag1 = 0;
+        solucion->real2 = (int32_t)x2;
+        solucion->imag2 = 0;
+        solucion->complex = false;
+	} else if (discriminante < 0) {
+		solucion->real1 = (int32_t)(-b / (2.0 * a));
+        solucion->imag1 = (int32_t)(sqrt(-discriminante) / (2.0 * a));
+        solucion->real2 = (int32_t)(-b / (2.0 * a));
+        solucion->imag2 = (int32_t)(-sqrt(-discriminante) / (2.0 * a));
+        solucion->complex = true;
+	} else {
+		solucion->real1 = (int32_t)(-b / (2.0 * a));
+        solucion->imag1 = 0;
+        solucion->real2 = (int32_t)(-b / (2.0 * a));
+        solucion->imag2 = 0;
+        solucion->complex = false;
+	}
+    return solucion;  // Retornamos la solución calculada, hay que liberar la memoria asignada por el llamador de esta función para evitar fugas de memoria.
+}
+/*
+=========================
+  int32_t bin2dec:
+   convierte un número binario a su equivalente en decimal
+  parametros:
+      binary: cadena de caracteres con el número binario
+      sign: booleano que indica si el número es con signo o sin signo
+  retorno:
+      número decimal resultante
+ =========================
+*/
+int32_t bin2dec(char *binary,bool sign) {
+    int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
+    size_t len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
+
+    for (int i = 0; i < len; i++) {                        //Iteramos para calcular el valor de cada digito.
+        if (binary[i] == '1') {              
+            num_dec = num_dec + pow(2, len - 1 - i); //Desplazamos el puntero y sumamos la potencia de 2 correspondiente al encontrar un 1.
+        }
+    }
+    if (sign && binary[0] == '1') {                       //Unsigned o Signed.
+        num_dec = -num_dec;
+    }
+    return num_dec;
+}
+/*
+=========================
+  void print_reverse_array:
+   imprime los elementos de un array en orden inverso
+  parametros:
+        array: puntero al inicio del array a imprimir
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime los elementos del array en orden inverso
+=========================
+*/
+void print_reverse_array(void *array,size_t data_type,size_t array_size) {
+    uint8_t *pa = (uint8_t *)array;                 //Puntero generico que recorre el array por byte. 
+    printf("Array en orden inverso:\n{");   //Marca el inicio de el array invertido.
+    for (int i = array_size - 1; i >= 0; i--) {    //Iteramos el array restando 1 al indice.
+        uint8_t *actual = pa + (i * data_type);    //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
+        printf("%s", *(char **)actual);    //Imprimimos el valor del elemento actual.
+    }
+    printf("}\n");
+    }
+/*
+=========================
+  max_index:
+   encuentra el índice del valor máximo en un array
+  parametros:
+        array: puntero al inicio del array a analizar
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime el índice y el valor máximo encontrado
+=========================
+*/
+void max_index(void *array, size_t data_type, size_t array_size) {
+    uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
+    int32_t max_val = *(int32_t *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
+    int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
+             
+    for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
+        int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
+        int32_t  valor_actual = *val_ptr;
+        if (valor_actual > max_val) {                          //Almacenamos si el valor actual es mayor que el max anterior.
+            max_val = valor_actual;
+            max_indx = i;                                      //Almacenamos el indice del nuevo valor máximo.
+        }
+      }
+        printf("Indice max: %d\n", max_indx);           //Imprimimos el indice del valor máximo encontrado.
+        printf("Valor max: %d\n", max_val);            //Imprimimos el valor máximo encontrado %d para int32_t.
+    }
+/*
+=========================
+  min_index:
+   encuentra el índice del valor máximo en un array
+  parametros:
+        array: puntero al inicio del array a analizar
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime el índice y el valor mínimo encontrado
+=========================
+*/
+void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
+    uint8_t *pa = (uint8_t *)array;                            
+    int32_t min_val = *(int32_t *)pa;                          
+    int  min_indx = 0;                                         
+
+    for (size_t i = 1; i < array_size; i++){                    
+        int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  
+        int32_t  valor_actual = *val_ptr;                       
+        if (valor_actual < min_val) {
+            min_val = valor_actual;
+            min_indx = i;
+        }
+      }
+        printf("Indice min: %d\n", min_indx);
+        printf("Valor min: %d\n", min_val);
+    }
+/*
+=========================
+  matriz_t *matrix_sub:
+   resta dos matrices
+  parametros:
+      A: matriz de entrada
+      B: matriz de entrada
+  retorno:
+      puntero a la matriz resultado
+=========================
+*/
+matriz_t *matrix_sub (matriz_t A,matriz_t B){
+    size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
+    size_t n_columna = A.cols;
+
+    if (n_filas != B.rows || n_columna != B.cols) {
+        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
+    }
+ 
+	matriz_t *matriz_resultado = malloc(sizeof(matriz_t)); //Asignamos memoria para la matriz resultado.
+    matriz_resultado->rows = n_filas;
+    matriz_resultado->cols = n_columna;
+    
+	for (int i = 0; i < n_filas; i++) {  //Recorremos las 2 matrices y las restamos con 2 for anidados.
+		for (int j = 0; j < n_columna; j++) {
+			matriz_resultado->data[i][j] = A.data[i][j] - B.data[i][j];
+		}
+	}
+	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices
+}                                       //Importante liberar la memoria asignada.
+ 
+
+/*
+ ========================= 
   swap:
   cambia dos elementos de cualquier tipo usando punteros genericos.
   parametros:
@@ -285,8 +465,7 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
 
     return 0;
 }
-
-/*
+/*  
 =========================
   print_coeff_t:
   imprime todos los atributos de una variable de tipo coeff_t
@@ -302,7 +481,7 @@ void print_coeff_t(coeff_t coef)
 }
 
 /*
-=========================
+  =========================
   print_root_t:
   imprime todos los atributos de una variable de tipo root_t
   parametros:
@@ -318,7 +497,7 @@ void print_root_t(root_t root)
 }
 
 /*
-=========================
+  =========================
   print_complex_t:
   imprime todos los atributos de una variable de tipo complex_t
   parametros:
@@ -348,7 +527,7 @@ void print_date_t(date_t date)
 }
 
 /*
-=========================
+  =========================
   print_matriz_t:
   imprime todos los atributos de una variable de tipo matriz_t
   parametros:
@@ -389,3 +568,230 @@ void print_matriz_t(matriz_t matriz)
         printf("\n");
     }
 }
+/*
+  =========================
+  ind_in_string:
+  busca la primera ocurrencia de needle en haystack
+  parametros:
+      haystack: cadena donde buscar
+      needle: cadena a buscar
+  retorno:
+      índice de la primera ocurrencia o -1 si no se encuentra
+=========================
+*/
+int find_in_string(char *haystack, char *needle){
+    int largo_haystack = strlen(haystack); //Guardo la longitud de haystack
+    int largo_needle = strlen(needle); //Guardo la longitud del needle
+    int indice; //Defino el indice donde voy a guardar la direccion de needle
+    int aux; // variable auxiliar
+
+
+    for (indice=0; indice<=largo_haystack-largo_needle;indice++){
+        int coincide=1;//valor para comprobar si coincide el needle con el haystack
+        for (aux=0;aux < largo_needle; aux++){
+            if (haystack[indice + aux] != needle[aux]){
+                coincide=0;
+                break;//revisar
+            }
+        }
+        if (coincide == 1){
+            return indice;
+        }
+    }
+    return -1; 
+}
+/*
+  =========================
+  string_to_caps:
+  convierte una cadena a mayúsculas
+  parametros:
+      string: cadena a convertir
+  retorno:
+        no retorna nada, pero modifica la cadena original a mayúsculas y la imprime.
+=========================
+*/
+void string_to_caps(char *string){
+    int indice;//defino un indice que va a representar la posicion en el string
+    //inicio un bucle for que termina cuando se encuentra '\0'
+    char mayus[]= "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    char mins[]="abcdefghijklmnñopqrstuvwxyz";
+    for (indice=0;string[indice] != '\0'; indice++){
+        int aux1;//defino un indice auxiliar, que representa la pocicion en el listado de minusculas
+        for(aux1=0; mins[aux1] != '\0'; aux1++){
+            if (string[indice]==mins[aux1]){//comparo la letra [i] del string con todas las minusculas
+                string[indice]=mayus[aux1];//si la letra es mayuscula, la reemplazo con la letra en minuscula
+            }
+        }    
+    }
+    printf("%s", string);
+}
+/*
+  =========================
+  string_to_mins:
+  convierte una cadena a minúsculas
+  parametros:
+      string: cadena a convertir
+  retorno:
+        no retorna nada, pero modifica la cadena original a minúsculas y la imprime.
+=========================
+*/
+void string_to_mins(char *string){
+    int indice;//defino un indice que va a representar la posicion en el string
+    //inicio un bucle for que termina cuando se encuentra '\0'
+    char mayus[]= "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    char mins[]="abcdefghijklmnñopqrstuvwxyz";
+    for (indice=0;string[indice] != '\0'; indice++){
+        int aux1; //defino un indice auxiliar, que representa la pocicion en el listado de mayusculas
+        for(aux1=0; mayus[aux1] != '\0'; aux1++){
+            if (string[indice]==mayus[aux1]){//comparo la letra [i] del string con todas las mayusculas 
+                string[indice]=mins[aux1];//si la letra es mayuscula, la reemplazo con la letra en minuscula
+            }
+        }
+    }
+    printf("%s", string);
+}
+/*
+  =========================
+  complex_t *sum:
+  suma dos números complejos
+  parametros:
+      a: primer número complejo
+      b: segundo número complejo
+  retorno:
+        puntero a un número complejo con el resultado de la suma
+=========================
+*/
+complex_t *sum(complex_t a, complex_t b){
+    complex_t *resultado = malloc(sizeof(complex_t));
+    resultado->real = a.real + b.real;//calculo y guardo la parte real del resultado
+    resultado->imag = a.imag + b.imag;//calculo y guardo la parte imaginaria del resultado
+    return resultado;
+}
+/*
+  =========================
+  complex_t *prod:
+  multiplica dos números complejos
+  parametros:
+      a: primer número complejo
+      b: segundo número complejo
+  retorno:
+        puntero a un número complejo con el resultado de la multiplicación
+=========================
+*/
+complex_t *prod(complex_t a, complex_t b){
+    // (a+bi)*(c+di)=a*c + a*di + bi*c + bi*di (como resolver 
+    //una mutiplicacion de numeros complejos)
+    complex_t *resultado = malloc(sizeof(complex_t));
+    resultado->real= (a.real*b.real)-(a.imag*b.imag);//calculo y guardo la parte real del resultado
+    resultado->imag=(a.real*b.imag)+(b.real*a.imag);//calculo y guardo la parte imaginaria del resultado
+    return resultado;
+}
+/*
+  =========================
+  chequear_si_bisiesto(auxiliar de days_left):
+  chequea si un año es bisiesto
+  parametros:
+      año: año a verificar
+  retorno:
+        1 si es bisiesto, 0 si no
+=========================
+*/
+int chequear_si_bisiesto(int año){
+    int bisiesto;//1 si es bisiesto, 0 si no;
+    if (año % 4==0 && año %100 !=0 || año %400 == 0){
+        bisiesto=1;
+    }else{
+        bisiesto=0;
+    }
+    return bisiesto;
+}
+/*
+  =========================
+  largo_del_mes(auxiliar de days_left):
+  calcula el largo de un mes dado su número y el año
+  parametros:
+      month: número del mes (1-12)
+      year: año
+  (Segun el mes)
+  retorno:
+        cantidad de días en el mes
+=========================
+*/
+int largo_del_mes(int month, int year){
+    if (month==2){
+        if(chequear_si_bisiesto(year)){
+            return 29;
+        }else{
+            return 28;
+        }
+    }else if (month==4 || month==6 || month==9 || month==11){
+        return 30;
+    }else{
+        return 31;
+    }
+}
+/*
+  =========================
+  lo_que_va_del_año(auxiliar de days_left):
+  calcula los días que han pasado desde el inicio del año hasta una fecha dada
+  parametros:
+      fecha: fecha a verificar
+  retorno:
+        cantidad de días que han pasado desde el inicio del año
+=========================
+*/
+int lo_que_va_del_año(date_t fecha){
+    int dias=0;
+    int i;
+    for (i=1;i<fecha.month;i++){
+        dias+=largo_del_mes(i, fecha.year);
+    }
+    dias+=fecha.day;
+    return dias;
+}
+/*
+  =========================
+  days_left:
+  Uso de lo_que_va_del_año y chequear_si_bisiesto.
+  calcula los días que faltan entre dos fechas
+  parametros:
+      start: fecha de inicio
+      finish: fecha de finalización
+  retorno:
+        cantidad de días entre las dos fechas, o un número negativo si la fecha de inicio es mayor a la fecha de finalización
+=========================
+*/
+int days_left(date_t start, date_t finish){
+    int start_mayor_a_finish=0;
+    if (start.year>finish.year || (start.year==finish.year && start.month>finish.month) || 
+    (start.year==finish.year && start.month==finish.month && start.day>finish.day)){ 
+        // Reviso que fecha es mayor que la otra, 
+        //y si la de inicio es mayor a la final, las intercambio
+        date_t aux=start;
+        start=finish;
+        finish=aux;
+        start_mayor_a_finish=1;
+    }
+    // Calculo de diferencia y años bisiestos
+    int i=0;
+    int dias=0;
+        if (start.year==finish.year){ //si ambos años son los mismos, calculo los dias que pasaron
+        dias= lo_que_va_del_año(finish)-lo_que_va_del_año(start);
+    }else{
+    for(i=start.year;i<finish.year;i++){ //creo un indice que va desde el año menor
+        //al año mayor, revisando si es bisiesto o no, y sumando los dias acordes 
+        if(chequear_si_bisiesto(i)){
+            dias+=366;
+        }else{
+            dias+=365;
+        }
+    }
+    //resto los dias que ya pasaron del año de inicio, y sumo los dias que pasaron del año de finalización
+    dias=dias-(lo_que_va_del_año(start))+(lo_que_va_del_año(finish));
+    if (start_mayor_a_finish==1){ //si la fecha de inicio era mayor a la de finalización, el resultado es negativo
+        dias=-dias;
+    }
+}
+    return dias;
+}
+
