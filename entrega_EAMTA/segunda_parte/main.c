@@ -5,6 +5,8 @@
 #include <string.h>
 
 int main(){
+    nodo_t *cabeza = NULL;
+    nodo_t *encontrado;
     int select = 0;
     while (select != 8){
     printf("Lista de estudiantes\n"
@@ -59,18 +61,18 @@ int main(){
             printf("LISTA ORDENADA POR CI\n");
             printf("========================================\n");
             ordenar_por_ci(cabeza);
-            mostrar_lista(*cabeza);
+            mostrar_lista(cabeza);
         }else if(select == 4){
             printf("\n========================================\n");
             printf("LISTA ORDENADA POR APELLIDO\n");
             printf("========================================\n");
             ordenar_por_apellido(cabeza);
-            mostrar_lista(*cabeza);
+            mostrar_lista(cabeza);
         }else if(select == 5){
             printf("\n========================================\n");
             printf("LISTA ORIGINAL\n");
             printf("========================================\n");
-            mostrar_lista(*cabeza);
+            mostrar_lista(cabeza);
         }else if(select == 6){ 
              printf("\n========================================\n");
             printf("BUSQUEDA POR NOMBRE/CEDULA\n");
@@ -83,19 +85,19 @@ int main(){
                 uint32_t ci;
                 printf("Ingrese la CI del estudiante a buscar: ");
                 scanf("%u", &ci);
-                buscar_por_ci(nodo_t *cabeza, uint32_t ci);
+                encontrado = buscar_por_ci(cabeza, ci);
             }else if (subselect == 2){
                 char nombre[64];
                 printf("Ingrese el nombre del estudiante a buscar: ");
                 scanf("%63s", nombre);
-                buscar_por_nombre(nodo_t *cabeza, char *nombre);
+                encontrado = buscar_por_nombre(cabeza, nombre);
             }
-            mostrar_estudiante(estudiante_t estudiante);
+            mostrar_estudiante(encontrado->estudiante);
         }else if(select == 7){
             printf("\n========================================\n");
             printf("CALIFICACIONES\n");
             printf("========================================\n");
-            mostrar_calificaciones(nodo_t *cabeza);;
+            mostrar_calificaciones(cabeza);
         }else if(select == 8){
             printf("\n========================================\n");
             printf("LIBERANDO MEMORIA\n");
