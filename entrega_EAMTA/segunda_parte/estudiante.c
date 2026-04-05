@@ -106,15 +106,15 @@ void elimina_estudiante(nodo_t **cabeza,uint32_t ci){
     // Caso 1: La lista está vacía
     if (*cabeza == NULL) return;
     // Caso 2: El estudiante a eliminar es el primero (el head)
-    if (ptr != NULL && ptr->data.ci == ci) {
-        *cabeza = ptr->link; // El segundo pasa a ser el primero
+    if (ptr != NULL && ptr->estudiante.ci == ci) {
+        *cabeza = ptr->siguiente; // El segundo pasa a ser el primero
         free(ptr);        // Liberamos la memoria del nodo eliminado
         return;
     }
     // Caso 3: Buscar el estudiante en el resto de la lista
-    while (ptr != NULL && ptr->data.ci != ci) {
+    while (ptr != NULL && ptr->estudiante.ci != ci) {
         anterior = ptr;    // Guardamos el actual como anterior
-        ptr = ptr->link;   // Avanzamos al siguiente
+        ptr = ptr->siguiente;   // Avanzamos al siguiente
     }
     // Si ptr es NULL, es porque recorrimos toda la lista y no encontramos la CI
     if (ptr == NULL) {
@@ -122,7 +122,7 @@ void elimina_estudiante(nodo_t **cabeza,uint32_t ci){
         return;
     }
     // "Saltamos" el nodo actual conectando el anterior con el siguiente
-    anterior->link = ptr->link;
+    anterior->siguiente = ptr->siguiente;
     
     // Liberamos la memoria para evitar fugas (memory leaks)
     free(ptr);
@@ -148,6 +148,7 @@ void mostrar_lista(nodo_t *cabeza) {
                ptr->estudiante.promedio);
         ptr = ptr->siguiente; // Avanzamos al siguiente nodo
     }
+}
 /*
 =========================
   mostrar_estudiante:
