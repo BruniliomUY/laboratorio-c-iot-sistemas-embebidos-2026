@@ -4,63 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-node *head = NULL;
-
-void agregar_estudiante(char nombre[64],char apellido[64],uint32_t ci,uint8_t grado,float promedio){
-    node *nuevo = malloc(sizeof(node));
-    if (nuevo == NULL) return;
-
-    strcpy(nuevo->data.nombre, nombre);
-    strcpy(nuevo->data.apellido, apellido);
-    nuevo->data.ci = ci;
-    nuevo->data.grado = grado;
-    nuevo->data.promedio = promedio;
-
-    nuevo->link = head;
-    head = nuevo;
-}
-
-void elimina_estudiante(uint32_t ci){
-    node *ptr = head; // Declaramos ptr y lo igualamos al inicio
-    node *anterior = NULL;
-    // Caso 1: La lista está vacía
-    if (head == NULL) return;
-    // Caso 2: El estudiante a eliminar es el primero (el head)
-    if (ptr != NULL && ptr->data.ci == ci) {
-        head = ptr->link; // El segundo pasa a ser el primero
-        free(ptr);        // Liberamos la memoria del nodo eliminado
-        return;
-    }
-    // Caso 3: Buscar el estudiante en el resto de la lista
-    while (ptr != NULL && ptr->data.ci != ci) {
-        anterior = ptr;    // Guardamos el actual como anterior
-        ptr = ptr->link;   // Avanzamos al siguiente
-    }
-    // Si ptr es NULL, es porque recorrimos toda la lista y no encontramos la CI
-    if (ptr == NULL) {
-        printf("Estudiante con CI %u no encontrado.\n", ci);
-        return;
-    }
-    // "Saltamos" el nodo actual conectando el anterior con el siguiente
-    anterior->link = ptr->link;
-    
-    // Liberamos la memoria para evitar fugas (memory leaks)
-    free(ptr);
-    }
-void mostrar_lista() {
-    node *ptr = head; // Declaramos ptr y lo igualamos al inicio
-    while (ptr != NULL) {
-        printf("Nombre: %s | Apellido: %s | CI: %u | Grado: %hhu | Promedio: %.2f\n", 
-               ptr->data.nombre, 
-               ptr->data.apellido, 
-               ptr->data.ci, 
-               ptr->data.grado, 
-               ptr->data.promedio);
-        ptr = ptr->link; // Avanzamos al siguiente nodo
-    }
-}
-
 /*
 ****************************************************************
     la idea de las listas enlazadas se inspiro en el video:
@@ -94,60 +37,6 @@ nodo_t *crear_nodo(estudiante_t estudiante)
     nuevo->siguiente = NULL;//apunta el puntero siguiente a null (a nada)
 
     return nuevo;//retorna la direccion del nuevo nodo
-}
-/*
-=========================
-  buscar_por_ci:
-  recorre la lista y busca un estudiante por su cedula.
-  parametros:
-      cabeza: puntero al primer nodo de la lista
-      ci: cedula del estudiante a buscar
-  retorno:
-      puntero al nodo encontrado o NULL si no encuentra
-=========================
-*/
-nodo_t *buscar_por_ci(nodo_t *cabeza, uint32_t ci)
-{
-    nodo_t *actual = cabeza;//puntero auxiliar.empieza en el primer nodo (la "cabeza")
-
-    while (actual != NULL)
-    {
-        if (actual->estudiante.ci == ci)
-        {
-            return actual;
-        }
-        actual = actual->siguiente;//el puntero actual pasa a apuntar a la dirección a la que apunta siguiente (al siguiente nodo)
-    }
-
-    return NULL;
-}
-
-/*
-=========================
-  buscar_por_nombre:
-  recorre la lista y busca un estudiante por nombre exacto.
-  Si hay varios con el mismo nombre, devuelve el primero.
-  parametros:
-      cabeza: puntero al primer nodo de la lista
-      nombre: nombre a buscar
-  retorno:
-      puntero al nodo encontrado o NULL si no encuentra
-=========================
-*/
-nodo_t *buscar_por_nombre(nodo_t *cabeza, char *nombre)
-{
-    nodo_t *actual = cabeza;
-
-    while (actual != NULL)
-    {
-        if (strcmp(actual->estudiante.nombre, nombre) == 0)//usa str compare para ver si el nombre del estudiante que está guardado en ese nodo al que apunta actual es igual al nombre buscado
-        {//strcmp devuelve 0 si son iguales
-            return actual;
-        }
-        actual = actual->siguiente;
-    }
-
-    return NULL;
 }
 
 /*
@@ -211,6 +100,126 @@ int insertar_estudiante(nodo_t **cabeza, estudiante_t estudiante)//el puntero do
       0 si lo elimino correctamente, -1 si no lo encontro o hubo error
 =========================
 */
+void elimina_estudiante(nodo_t **cabeza,uint32_t ci){
+    nodo_t *ptr = *cabeza; // Declaramos ptr y lo igualamos al inicio
+    nodo_t *anterior = NULL;
+    // Caso 1: La lista está vacía
+    if (*cabeza == NULL) return;
+    // Caso 2: El estudiante a eliminar es el primero (el head)
+    if (ptr != NULL && ptr->data.ci == ci) {
+        head = ptr->link; // El segundo pasa a ser el primero
+        free(ptr);        // Liberamos la memoria del nodo eliminado
+        return;
+    }
+    // Caso 3: Buscar el estudiante en el resto de la lista
+    while (ptr != NULL && ptr->data.ci != ci) {
+        anterior = ptr;    // Guardamos el actual como anterior
+        ptr = ptr->link;   // Avanzamos al siguiente
+    }
+    // Si ptr es NULL, es porque recorrimos toda la lista y no encontramos la CI
+    if (ptr == NULL) {
+        printf("Estudiante con CI %u no encontrado.\n", ci);
+        return;
+    }
+    // "Saltamos" el nodo actual conectando el anterior con el siguiente
+    anterior->link = ptr->link;
+    
+    // Liberamos la memoria para evitar fugas (memory leaks)
+    free(ptr);
+    }
+/*
+=========================
+  mostrar_lista:
+  muestra todos los estudiantes de la lista.
+  parametros:
+      cabeza: direccion del puntero a la cabeza de la lista
+  retorno:
+        no retorna nada, solo imprime los datos de cada estudiante
+=========================
+*/
+void mostrar_lista(nodo_t *cabeza) {
+    nodo_t *ptr = cabeza; // Declaramos ptr y lo igualamos al inicio
+    while (ptr != NULL) {
+        printf("Nombre: %s | Apellido: %s | CI: %u | Grado: %hhu | Promedio: %.2f\n", 
+               ptr->estudiante.nombre, 
+               ptr->estudiante.apellido, 
+               ptr->estudiante.ci, 
+               ptr->estudiante.grado, 
+               ptr->estudiante.promedio);
+        ptr = ptr->siguiente; // Avanzamos al siguiente nodo
+    }
+/*
+=========================
+  mostrar_estudiante:
+  muestra todos los estudiantes de la lista.
+  parametros:
+      cabeza: direccion del puntero a la cabeza de la lista
+  retorno:
+        no retorna nada, solo imprime los datos de cada estudiante
+=========================
+*/
+void mostrar_estudiante(estudiante_t estudiante) {
+    printf("Nombre: %s | Apellido: %s | CI: %u | Grado: %hhu | Promedio: %.2f\n", 
+           estudiante.nombre, 
+           estudiante.apellido, 
+           estudiante.ci, 
+           estudiante.grado, 
+           estudiante.promedio);
+}
+/*
+=========================
+  buscar_por_ci:
+  recorre la lista y busca un estudiante por su cedula.
+  parametros:
+      cabeza: puntero al primer nodo de la lista
+      ci: cedula del estudiante a buscar
+  retorno:
+      puntero al nodo encontrado o NULL si no encuentra
+=========================
+*/
+nodo_t *buscar_por_ci(nodo_t *cabeza, uint32_t ci)
+{
+    nodo_t *actual = cabeza;//puntero auxiliar.empieza en el primer nodo (la "cabeza")
+
+    while (actual != NULL)
+    {
+        if (actual->estudiante.ci == ci)
+        {
+            return actual;
+        }
+        actual = actual->siguiente;//el puntero actual pasa a apuntar a la dirección a la que apunta siguiente (al siguiente nodo)
+    }
+
+    return NULL;
+}
+
+/*
+=========================
+  buscar_por_nombre:
+  recorre la lista y busca un estudiante por nombre exacto.
+  Si hay varios con el mismo nombre, devuelve el primero.
+  parametros:
+      cabeza: puntero al primer nodo de la lista
+      nombre: nombre a buscar
+  retorno:
+      puntero al nodo encontrado o NULL si no encuentra
+=========================
+*/
+nodo_t *buscar_por_nombre(nodo_t *cabeza, char *nombre)
+{
+    nodo_t *actual = cabeza;
+
+    while (actual != NULL)
+    {
+        if (strcmp(actual->estudiante.nombre, nombre) == 0)//usa str compare para ver si el nombre del estudiante que está guardado en ese nodo al que apunta actual es igual al nombre buscado
+        {//strcmp devuelve 0 si son iguales
+            return actual;
+        }
+        actual = actual->siguiente;
+    }
+
+    return NULL;
+}
 
 /*
 =========================

@@ -61,6 +61,20 @@ int eliminar_estudiante(nodo_t **cabeza, uint32_t ci);
 
 /*
 =========================
+  mostrar_lista:
+    recorre la lista e imprime los datos de cada estudiante.
+=========================
+*/
+void mostrar_lista(nodo_t *cabeza);
+
+/*
+=========================
+    Muestra un estudiante en pantalla.
+=========================
+*/
+void mostrar_estudiante(estudiante_t estudiante);
+/*
+=========================
     Busca un estudiante por CI.
     Retorna el nodo si lo encuentra.
     Retorna NULL si no existe.
@@ -76,20 +90,6 @@ nodo_t * buscar_por_ci(nodo_t *cabeza, uint32_t ci);
 =========================
 */
 nodo_t * buscar_por_nombre(nodo_t *cabeza, char *nombre);
-
-/*
-=========================
-    Muestra un estudiante en pantalla.
-=========================
-*/
-void mostrar_estudiante(estudiante_t estudiante);
-
-/*
-=========================
-    Muestra toda la lista.
-=========================
-*/
-void mostrar_lista(nodo_t *cabeza);
 
 /*
 =========================
@@ -126,4 +126,4 @@ void mostrar_calificaciones(nodo_t *cabeza);
 */
 void liberar_lista(nodo_t **cabeza);
 
-#endif
+#endif      
