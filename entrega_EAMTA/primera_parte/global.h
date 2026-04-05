@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+/* ==========================================
+   1. TIPOS DE DATOS 
+   ========================================== */
 typedef struct { //defino la estructura de un numero imaginario
     int32_t real;
     int32_t imag;
@@ -40,6 +43,14 @@ typedef struct {
 /* ==========================================
    2. PROTOTIPOS DE FUNCIONES 
    ========================================== */
+void print_coeff_t(coeff_t coef);
+
+void print_root_t(root_t root);
+
+void print_complex_t(complex_t c);
+
+void print_date_t(date_t date);
+
 void init_lab(void); //Imprime los nombres de los integrantes del grupo. 
 
 root_t* eq_solver(coeff_t *coeficientes ); //Recibe un arreglo de coeficientes y devuelve un arreglo con las raíces de la ecuación.

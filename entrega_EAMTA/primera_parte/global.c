@@ -1,13 +1,145 @@
 #include "global.h"
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 #include <stdint.h>
-#include <string.h>
-<<<<<<< HEAD
 #include <stdlib.h>
+#include <math.h>
+
+/*
+=========================
+  print_coeff_t:
+  imprime todos los atributos de una variable de tipo coeff_t
+  parametros:
+      coef: estructura con los coeficientes a, b y c
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_coeff_t(coeff_t coef)
+{
+    printf("a = %d, b = %d, c = %d\n", coef.a, coef.b, coef.c);
+}
+
+/*
+=========================
+  print_root_t:
+  imprime todos los atributos de una variable de tipo root_t
+  parametros:
+      root: estructura con las dos raices y si son complejas o no
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_root_t(root_t root)
+{
+    printf("real1 = %d, imag1 = %d, real2 = %d, imag2 = %d, complex = %d\n",
+           root.real1, root.imag1, root.real2, root.imag2, root.complex);
+}
+
+/*
+=========================
+  print_complex_t:
+  imprime todos los atributos de una variable de tipo complex_t
+  parametros:
+      c: estructura con parte real e imaginaria
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_complex_t(complex_t c)
+{
+    printf("real = %d, imag = %d\n", c.real, c.imag);
+}
+
+/*
+=========================
+  print_date_t:
+  imprime todos los atributos de una variable de tipo date_t
+  parametros:
+      date: estructura con dia, mes y anio
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_date_t(date_t date)
+{
+    printf("day = %d, month = %d, year = %d\n", date.day, date.month, date.year);
+}
+
+/*
+=========================
+  print_matriz_t:
+  imprime todos los atributos de una variable de tipo matriz_t
+  parametros:
+      matriz: estructura con los datos de la matriz, cantidad de filas y columnas
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_matriz_t(matriz_t matriz)
+{
+    if (matriz.data == NULL)
+    {
+        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
+        return;
+    }
+
+    if (matriz.rows <= 0 || matriz.cols <= 0)
+    {
+        printf("Error: dimensiones invalidas\n");
+        return;
+    }
+
+    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
+
+    for (int i = 0; i < matriz.rows; i++)// recorre filas
+    {
+        if (matriz.data[i] == NULL)
+        {
+            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
+            return;
+        }
+
+        for (int j = 0; j < matriz.cols; j++)// recorre columnas
+        {
+            printf("%d ", matriz.data[i][j]);// imprimo cada numero
+        }
+
+        printf("\n");
+    }
+}
 
 
+/*
+=========================
+  init_lab:
+   printea la informacion inicial del laboratorio
+  parametros:
+      ninguno
+  retorno:
+      no retorna nada
+=========================
+*/
+void init_lab(void)
+{
+    printf("Laboratorio Lenguaje C""\n");
+    printf("Integrantes del grupo:\n");
+    printf("- Victoria Amor\n");
+    printf("- Nicolas Meyer\n");
+    printf("- Bruno Moreira\n");
+}
+
+/*
+=========================
+  root_t* eq_solver:
+   resuelve la ecuacion de segundo grado dada por los coeficientes a, b y c usando el metodo de Bhaskara
+   y devuelve un puntero a una estructura root_t con las soluciones reales o complejas segun corresponda
+  parametros:
+      coeficientes: puntero a una estructura coeff_t con los coeficientes a, b y c de la ecuacion
+  retorno:
+      puntero a una estructura root_t con las soluciones reales o complejas segun corresponda
+=========================
+*/
 root_t* eq_solver(coeff_t *coeficientes) {
     root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
     
@@ -41,7 +173,17 @@ root_t* eq_solver(coeff_t *coeficientes) {
 	}
     return solucion;  // Retornamos la solución calculada, hay que liberar la memoria asignada por el llamador de esta función para evitar fugas de memoria.
 }
-
+/*
+=========================
+  int32_t bin2dec:
+   convierte un número binario a su equivalente en decimal
+  parametros:
+      binary: cadena de caracteres con el número binario
+      sign: booleano que indica si el número es con signo o sin signo
+  retorno:
+      número decimal resultante
+=========================
+*/
 int32_t bin2dec(char *binary,bool sign) {
     int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
     size_t len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
@@ -56,7 +198,18 @@ int32_t bin2dec(char *binary,bool sign) {
     }
     return num_dec;
 }
-
+/*
+=========================
+  void print_reverse_array:
+   imprime los elementos de un array en orden inverso
+  parametros:
+        array: puntero al inicio del array a imprimir
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime los elementos del array en orden inverso
+=========================
+*/
 void print_reverse_array(void *array,size_t data_type,size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                 //Puntero generico que recorre el array por byte. 
     printf("Array en orden inverso:\n{");   //Marca el inicio de el array invertido.
@@ -66,11 +219,22 @@ void print_reverse_array(void *array,size_t data_type,size_t array_size) {
     }
     printf("}\n");
     }
-
+/*
+=========================
+  max_index:
+   encuentra el índice del valor máximo en un array
+  parametros:
+        array: puntero al inicio del array a analizar
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime el índice y el valor máximo encontrado
+=========================
+*/
 void max_index(void *array, size_t data_type, size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
     int32_t max_val = *(int32_t *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
-    int  max_indx = 0;   $//VER                                    //Definimos variable para almacenar el indice.
+    int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
              
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
@@ -83,11 +247,22 @@ void max_index(void *array, size_t data_type, size_t array_size) {
         printf("Indice max: %d\n", max_indx);           //Imprimimos el indice del valor máximo encontrado.
         printf("Valor max: %d\n", max_val);            //Imprimimos el valor máximo encontrado %d para int32_t.
     }
-
+/*
+=========================
+  min_index:
+   encuentra el índice del valor máximo en un array
+  parametros:
+        array: puntero al inicio del array a analizar
+        data_type: tamaño en bytes del tipo de dato de los elementos del array
+        array_size: cantidad de elementos en el array
+  retorno:      
+        no retorna nada, pero imprime el índice y el valor mínimo encontrado
+=========================
+*/
 void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
     uint8_t *pa = (uint8_t *)array;                            
     int32_t min_val = *(int32_t *)pa;                          
-    int  min_indx = 0;        $//VER                                  
+    int  min_indx = 0;                                         
 
     for (size_t i = 1; i < array_size; i++){                    
         int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  
@@ -100,7 +275,17 @@ void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a m
         printf("Indice min: %d\n", min_indx);
         printf("Valor min: %d\n", min_val);
     }
-
+/*
+=========================
+  matriz_t *matrix_sub:
+   resta dos matrices
+  parametros:
+      A: matriz de entrada
+      B: matriz de entrada
+  retorno:
+      puntero a la matriz resultado
+=========================
+*/
 matriz_t *matrix_sub (matriz_t A,matriz_t B){
     size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
     size_t n_columna = A.cols;
@@ -121,24 +306,6 @@ matriz_t *matrix_sub (matriz_t A,matriz_t B){
 	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices
 }                                       //Importante liberar la memoria asignada.
  
-/*
-=========================
-  init_lab:
-   printea la informacion inicial del laboratorio
-  parametros:
-      ninguno
-  retorno:
-      no retorna nada
-=========================
-*/
-void init_lab(void)
-{
-    printf("Laboratorio Lenguaje C""\n");
-    printf("Integrantes del grupo:\n");
-    printf("- Victoria Amor\n");
-    printf("- Nicolas Meyer\n");
-    printf("- Bruno Moreira\n");
-}
 
 /*
 =========================
@@ -390,111 +557,17 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
 
     return 0;
 }
-
 /*
-=========================
-  print_coeff_t:
-  imprime todos los atributos de una variable de tipo coeff_t
+========================
+  ind_in_string:
+  busca la primera ocurrencia de needle en haystack
   parametros:
-      coef: estructura con los coeficientes a, b y c
+      haystack: cadena donde buscar
+      needle: cadena a buscar
   retorno:
-      no retorna nada
-=========================
+      índice de la primera ocurrencia o -1 si no se encuentra
+========================
 */
-void print_coeff_t(coeff_t coef)
-{
-    printf("a = %d, b = %d, c = %d\n", coef.a, coef.b, coef.c);
-}
-
-/*
-=========================
-  print_root_t:
-  imprime todos los atributos de una variable de tipo root_t
-  parametros:
-      root: estructura con las dos raices y si son complejas o no
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_root_t(root_t root)
-{
-    printf("real1 = %d, imag1 = %d, real2 = %d, imag2 = %d, complex = %d\n",
-           root.real1, root.imag1, root.real2, root.imag2, root.complex);
-}
-
-/*
-=========================
-  print_complex_t:
-  imprime todos los atributos de una variable de tipo complex_t
-  parametros:
-      c: estructura con parte real e imaginaria
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_complex_t(complex_t c)
-{
-    printf("real = %d, imag = %d\n", c.real, c.imag);
-}
-
-/*
-=========================
-  print_date_t:
-  imprime todos los atributos de una variable de tipo date_t
-  parametros:
-      date: estructura con dia, mes y anio
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_date_t(date_t date)
-{
-    printf("day = %d, month = %d, year = %d\n", date.day, date.month, date.year);
-}
-
-/*
-=========================
-  print_matriz_t:
-  imprime todos los atributos de una variable de tipo matriz_t
-  parametros:
-      matriz: estructura con los datos de la matriz, cantidad de filas y columnas
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_matriz_t(matriz_t matriz)
-{
-    if (matriz.data == NULL)
-    {
-        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
-        return;
-    }
-
-    if (matriz.rows <= 0 || matriz.cols <= 0)
-    {
-        printf("Error: dimensiones invalidas\n");
-        return;
-    }
-
-    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
-
-    for (int i = 0; i < matriz.rows; i++)// recorre filas
-    {
-        if (matriz.data[i] == NULL)
-        {
-            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
-            return;
-        }
-
-        for (int j = 0; j < matriz.cols; j++)// recorre columnas
-        {
-            printf("%d ", matriz.data[i][j]);// imprimo cada numero
-        }
-
-        printf("\n");
-    }
-=======
-
 int find_in_string(char *haystack, char *needle){
     int largo_haystack = strlen(haystack); //Guardo la longitud de haystack
     int largo_needle = strlen(needle); //Guardo la longitud del needle
@@ -515,9 +588,17 @@ int find_in_string(char *haystack, char *needle){
         }
     }
     return -1; 
->>>>>>> nico
 }
-
+/*
+========================
+  string_to_caps:
+  convierte una cadena a mayúsculas
+  parametros:
+      string: cadena a convertir
+  retorno:
+        no retorna nada, pero modifica la cadena original a mayúsculas y la imprime.
+========================
+*/
 void string_to_caps(char *string){
     int indice;//defino un indice que va a representar la posicion en el string
     //inicio un bucle for que termina cuando se encuentra '\0'
@@ -533,7 +614,16 @@ void string_to_caps(char *string){
     }
     printf("%s", string);
 }
-
+/*
+========================
+  string_to_mins:
+  convierte una cadena a minúsculas
+  parametros:
+      string: cadena a convertir
+  retorno:
+        no retorna nada, pero modifica la cadena original a minúsculas y la imprime.
+========================
+*/
 void string_to_mins(char *string){
     int indice;//defino un indice que va a representar la posicion en el string
     //inicio un bucle for que termina cuando se encuentra '\0'
@@ -549,14 +639,34 @@ void string_to_mins(char *string){
     }
     printf("%s", string);
 }
-
+/*
+========================
+  complex_t *sum:
+  suma dos números complejos
+  parametros:
+      a: primer número complejo
+      b: segundo número complejo
+  retorno:
+        puntero a un número complejo con el resultado de la suma
+========================
+*/
 complex_t *sum(complex_t a, complex_t b){
     complex_t *resultado = malloc(sizeof(complex_t));
     resultado->real = a.real + b.real;//calculo y guardo la parte real del resultado
     resultado->imag = a.imag + b.imag;//calculo y guardo la parte imaginaria del resultado
     return resultado;
 }
-
+/*
+========================
+  complex_t *prod:
+  multiplica dos números complejos
+  parametros:
+      a: primer número complejo
+      b: segundo número complejo
+  retorno:
+        puntero a un número complejo con el resultado de la multiplicación
+========================
+*/
 complex_t *prod(complex_t a, complex_t b){
     // (a+bi)*(c+di)=a*c + a*di + bi*c + bi*di (como resolver 
     //una mutiplicacion de numeros complejos)
@@ -565,7 +675,16 @@ complex_t *prod(complex_t a, complex_t b){
     resultado->imag=(a.real*b.imag)+(b.real*a.imag);//calculo y guardo la parte imaginaria del resultado
     return resultado;
 }
-
+/*
+========================
+  chequear_si_bisiesto(auxiliar de days_left):
+  chequea si un año es bisiesto
+  parametros:
+      año: año a verificar
+  retorno:
+        1 si es bisiesto, 0 si no
+========================
+*/
 int chequear_si_bisiesto(int año){
     int bisiesto;//1 si es bisiesto, 0 si no;
     if (año % 4==0 && año %100 !=0 || año %400 == 0){
@@ -575,7 +694,18 @@ int chequear_si_bisiesto(int año){
     }
     return bisiesto;
 }
-
+/*
+========================
+  largo_del_mes(auxiliar de days_left):
+  calcula el largo de un mes dado su número y el año
+  parametros:
+      month: número del mes (1-12)
+      year: año
+  (Segun el mes)
+  retorno:
+        cantidad de días en el mes
+========================
+*/
 int largo_del_mes(int month, int year){
     if (month==2){
         if(chequear_si_bisiesto(year)){
@@ -589,7 +719,16 @@ int largo_del_mes(int month, int year){
         return 31;
     }
 }
-
+/*
+========================
+  lo_que_va_del_año(auxiliar de days_left):
+  calcula los días que han pasado desde el inicio del año hasta una fecha dada
+  parametros:
+      fecha: fecha a verificar
+  retorno:
+        cantidad de días que han pasado desde el inicio del año
+========================
+*/
 int lo_que_va_del_año(date_t fecha){
     int dias=0;
     int i;
@@ -599,7 +738,18 @@ int lo_que_va_del_año(date_t fecha){
     dias+=fecha.day;
     return dias;
 }
-
+/*
+========================
+  days_left:
+  Uso de lo_que_va_del_año y chequear_si_bisiesto.
+  calcula los días que faltan entre dos fechas
+  parametros:
+      start: fecha de inicio
+      finish: fecha de finalización
+  retorno:
+        cantidad de días entre las dos fechas, o un número negativo si la fecha de inicio es mayor a la fecha de finalización
+========================
+*/
 int days_left(date_t start, date_t finish){
     int start_mayor_a_finish=0;
     if (start.year>finish.year || (start.year==finish.year && start.month>finish.month) || 
