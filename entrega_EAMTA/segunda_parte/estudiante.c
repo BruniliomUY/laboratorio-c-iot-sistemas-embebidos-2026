@@ -100,7 +100,7 @@ int insertar_estudiante(nodo_t **cabeza, estudiante_t estudiante)//el puntero do
       0 si lo elimino correctamente, -1 si no lo encontro o hubo error
 =========================
 */
-void elimina_estudiante(nodo_t **cabeza,uint32_t ci){
+int eliminar_estudiante(nodo_t **cabeza,uint32_t ci){
     nodo_t *ptr = *cabeza; // Declaramos ptr y lo igualamos al inicio
     nodo_t *anterior = NULL;
     // Caso 1: La lista está vacía
