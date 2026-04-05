@@ -5,7 +5,48 @@
 
 int main(){
     nodo_t *cabeza = NULL;
+
+    estudiante_t e1 = {"Victoria", "Amor", 51234567, 1, 95.0f};
+    estudiante_t e2 = {"Bruno", "Moreira", 49876543, 2, 78.5f};
+    estudiante_t e3 = {"Nicolas", "Meyer", 53456789, 3, 62.0f};
+    estudiante_t e4 = {"Luis", "Alvarez", 47654321, 2, 29.0f};
+    estudiante_t e5 = {"Elotro", "Rodriguez", 55678901, 4, 88.0f};
+    estudiante_t repetido = {"Pepe", "Sanchez", 49876543, 1, 70.0f};
+
     nodo_t *encontrado;
+
+    
+    if (insertar_estudiante(&cabeza, e1) == 0)
+        printf("Se inserto a Victoria Amor.\n");
+    else
+        printf("Error al insertar a Victoria Amor.\n");
+
+    if (insertar_estudiante(&cabeza, e2) == 0)
+        printf("Se inserto a Bruno Moreira.\n");
+    else
+        printf("Error al insertar a Bruno Moreira.\n");
+
+    if (insertar_estudiante(&cabeza, e3) == 0)
+        printf("Se inserto a Nicolas Meyer.\n");
+    else
+        printf("Error al insertar a Nicolas Meyer.\n");
+
+    if (insertar_estudiante(&cabeza, e4) == 0)
+        printf("Se inserto a Luis Alvarez.\n");
+    else
+        printf("Error al insertar a Luis Alvarez.\n");
+
+    if (insertar_estudiante(&cabeza, e5) == 0)
+        printf("Se inserto a Elotro Rodriguez.\n");
+    else
+        printf("Error al insertar a Elotro Rodriguez.\n");
+
+    printf("\nIntentando insertar un estudiante con CI repetida...\n");
+    if (insertar_estudiante(&cabeza, repetido) == 0)
+        printf("Se inserto a Pepe Sanchez (esto no deberia pasar).\n");
+    else
+        printf("No se inserto a Pepe Sanchez, como corresponde (CI repetida).\n");
+
     int select = 0;
     while (select != 8){
     printf("Lista de estudiantes\n"
@@ -91,7 +132,11 @@ int main(){
                 scanf("%63s", nombre);
                 encontrado = buscar_por_nombre(cabeza, nombre);
             }
-            mostrar_estudiante(encontrado->estudiante);
+            if (encontrado==NULL){
+                printf("Estudiante no encontrado.\n");
+            }else{
+                mostrar_estudiante(encontrado->estudiante);
+            }
         }else if(select == 7){
             printf("\n========================================\n");
             printf("CALIFICACIONES\n");

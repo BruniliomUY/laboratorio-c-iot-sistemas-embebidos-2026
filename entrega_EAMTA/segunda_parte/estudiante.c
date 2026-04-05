@@ -104,12 +104,12 @@ int eliminar_estudiante(nodo_t **cabeza,uint32_t ci){
     nodo_t *ptr = *cabeza; // Declaramos ptr y lo igualamos al inicio
     nodo_t *anterior = NULL;
     // Caso 1: La lista está vacía
-    if (*cabeza == NULL) return 1;
+    if (*cabeza == NULL) return -1;
     // Caso 2: El estudiante a eliminar es el primero (el head)
     if (ptr != NULL && ptr->estudiante.ci == ci) {
         *cabeza = ptr->siguiente; // El segundo pasa a ser el primero
         free(ptr);        // Liberamos la memoria del nodo eliminado
-        return 1;
+        return 0;
     }
     // Caso 3: Buscar el estudiante en el resto de la lista
     while (ptr != NULL && ptr->estudiante.ci != ci) {
@@ -119,7 +119,7 @@ int eliminar_estudiante(nodo_t **cabeza,uint32_t ci){
     // Si ptr es NULL, es porque recorrimos toda la lista y no encontramos la CI
     if (ptr == NULL) {
         printf("Estudiante con CI %u no encontrado.\n", ci);
-        return 1;
+        return -1;
     }
     // "Saltamos" el nodo actual conectando el anterior con el siguiente
     anterior->siguiente = ptr->siguiente;
@@ -339,4 +339,44 @@ void liberar_lista(nodo_t **cabeza)
     }
 // primero se avanza al siguiente nodo y luego se libera "actual" porque si se libera antes ya no se sabe quien es actual->siguiente
     *cabeza = NULL;
+}
+
+void mostrar_calificaciones(nodo_t *cabeza){
+    nodo_t *ptr = cabeza; // Declaramos ptr y lo igualamos al inicio
+    while (ptr != NULL) {
+        float promedio = ptr->estudiante.promedio;
+        if (0<=promedio && promedio<=30){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: D\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);
+        }else if(31<promedio && promedio<=60){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: R\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);    
+        }else if(61<promedio && promedio<=75){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: B\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);
+        }else if(76<promedio && promedio<=81){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: BMB\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);
+        }else if(82<promedio && promedio<=94){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: MB\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);
+        }else if(95<=promedio && promedio<=100){
+                printf("Nombre: %s | Apellido: %s | CI: %u | Calificacion: S\n", 
+                ptr->estudiante.nombre, 
+                ptr->estudiante.apellido, 
+                ptr->estudiante.ci);
+        }
+        ptr = ptr->siguiente; // Avanzamos al siguiente nodo
+    
+    }
 }
