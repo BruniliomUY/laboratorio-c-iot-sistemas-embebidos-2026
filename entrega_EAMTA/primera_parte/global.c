@@ -7,111 +7,6 @@
 
 /*
 =========================
-  print_coeff_t:
-  imprime todos los atributos de una variable de tipo coeff_t
-  parametros:
-      coef: estructura con los coeficientes a, b y c
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_coeff_t(coeff_t coef)
-{
-    printf("a = %d, b = %d, c = %d\n", coef.a, coef.b, coef.c);
-}
-
-/*
-=========================
-  print_root_t:
-  imprime todos los atributos de una variable de tipo root_t
-  parametros:
-      root: estructura con las dos raices y si son complejas o no
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_root_t(root_t root)
-{
-    printf("real1 = %d, imag1 = %d, real2 = %d, imag2 = %d, complex = %d\n",
-           root.real1, root.imag1, root.real2, root.imag2, root.complex);
-}
-
-/*
-=========================
-  print_complex_t:
-  imprime todos los atributos de una variable de tipo complex_t
-  parametros:
-      c: estructura con parte real e imaginaria
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_complex_t(complex_t c)
-{
-    printf("real = %d, imag = %d\n", c.real, c.imag);
-}
-
-/*
-=========================
-  print_date_t:
-  imprime todos los atributos de una variable de tipo date_t
-  parametros:
-      date: estructura con dia, mes y anio
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_date_t(date_t date)
-{
-    printf("day = %d, month = %d, year = %d\n", date.day, date.month, date.year);
-}
-
-/*
-=========================
-  print_matriz_t:
-  imprime todos los atributos de una variable de tipo matriz_t
-  parametros:
-      matriz: estructura con los datos de la matriz, cantidad de filas y columnas
-  retorno:
-      no retorna nada
-=========================
-*/
-void print_matriz_t(matriz_t matriz)
-{
-    if (matriz.data == NULL)
-    {
-        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
-        return;
-    }
-
-    if (matriz.rows <= 0 || matriz.cols <= 0)
-    {
-        printf("Error: dimensiones invalidas\n");
-        return;
-    }
-
-    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
-
-    for (int i = 0; i < matriz.rows; i++)// recorre filas
-    {
-        if (matriz.data[i] == NULL)
-        {
-            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
-            return;
-        }
-
-        for (int j = 0; j < matriz.cols; j++)// recorre columnas
-        {
-            printf("%d ", matriz.data[i][j]);// imprimo cada numero
-        }
-
-        printf("\n");
-    }
-}
-
-
-/*
-=========================
   init_lab:
    printea la informacion inicial del laboratorio
   parametros:
@@ -131,7 +26,7 @@ void init_lab(void)
 
 /*
 =========================
-  root_t* eq_solver:
+ root_t* eq_solver:
    resuelve la ecuacion de segundo grado dada por los coeficientes a, b y c usando el metodo de Bhaskara
    y devuelve un puntero a una estructura root_t con las soluciones reales o complejas segun corresponda
   parametros:
@@ -182,7 +77,7 @@ root_t* eq_solver(coeff_t *coeficientes) {
       sign: booleano que indica si el número es con signo o sin signo
   retorno:
       número decimal resultante
-=========================
+ =========================
 */
 int32_t bin2dec(char *binary,bool sign) {
     int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
@@ -308,7 +203,7 @@ matriz_t *matrix_sub (matriz_t A,matriz_t B){
  
 
 /*
-=========================
+ ========================= 
   swap:
   cambia dos elementos de cualquier tipo usando punteros genericos.
   parametros:
@@ -398,7 +293,9 @@ int consonantes(char *string)
 */
 int vocales(char *string)
 {
-    int vocales = 0;
+    int contador = 0;
+
+    char *vocales = "aeiouAEIOUáéíóúÁÉÍÓÚ";
 
     if (string == NULL)
     {
@@ -407,14 +304,25 @@ int vocales(char *string)
 
     while (*string != '\0')
     {
-        if (*string == 'a' || *string == 'e' || *string == 'i' || *string == 'o' || *string == 'u' || *string == 'A' || *string == 'E' || *string == 'I' || *string == 'O' || *string == 'U')//si el valor al que apunta el puntero e suna vocla en mayusucla o minuscula suma uno al contador
+        int es_vocal = 0;
+
+        for (int i = 0; vocales[i] != '\0'; i++)
         {
-            vocales++;
+            if (*string == vocales[i])
+            {
+                es_vocal = 1;
+            }
         }
-        string++;//equivalente a string = string + 1 osea avanza al proximo caracter del array
+
+        if (es_vocal == 1)
+        {
+            contador++;
+        }
+
+        string++;
     }
 
-    return vocales;
+    return contador;
 }
 
 /*
@@ -557,8 +465,111 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
 
     return 0;
 }
+/*  
+=========================
+  print_coeff_t:
+  imprime todos los atributos de una variable de tipo coeff_t
+  parametros:
+      coef: estructura con los coeficientes a, b y c
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_coeff_t(coeff_t coef)
+{
+    printf("a = %d, b = %d, c = %d\n", coef.a, coef.b, coef.c);
+}
+
 /*
-========================
+  =========================
+  print_root_t:
+  imprime todos los atributos de una variable de tipo root_t
+  parametros:
+      root: estructura con las dos raices y si son complejas o no
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_root_t(root_t root)
+{
+    printf("real1 = %d, imag1 = %d, real2 = %d, imag2 = %d, complex = %d\n",
+           root.real1, root.imag1, root.real2, root.imag2, root.complex);
+}
+
+/*
+  =========================
+  print_complex_t:
+  imprime todos los atributos de una variable de tipo complex_t
+  parametros:
+      c: estructura con parte real e imaginaria
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_complex_t(complex_t c)
+{
+    printf("real = %d, imag = %d\n", c.real, c.imag);
+}
+
+/*
+=========================
+  print_date_t:
+  imprime todos los atributos de una variable de tipo date_t
+  parametros:
+      date: estructura con dia, mes y anio
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_date_t(date_t date)
+{
+    printf("day = %d, month = %d, year = %d\n", date.day, date.month, date.year);
+}
+
+/*
+  =========================
+  print_matriz_t:
+  imprime todos los atributos de una variable de tipo matriz_t
+  parametros:
+      matriz: estructura con los datos de la matriz, cantidad de filas y columnas
+  retorno:
+      no retorna nada
+=========================
+*/
+void print_matriz_t(matriz_t matriz)
+{
+    if (matriz.data == NULL)
+    {
+        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
+        return;
+    }
+
+    if (matriz.rows <= 0 || matriz.cols <= 0)
+    {
+        printf("Error: dimensiones invalidas\n");
+        return;
+    }
+
+    printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
+
+    for (int i = 0; i < matriz.rows; i++)// recorre filas
+    {
+        if (matriz.data[i] == NULL)
+        {
+            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
+            return;
+        }
+
+        for (int j = 0; j < matriz.cols; j++)// recorre columnas
+        {
+            printf("%d ", matriz.data[i][j]);// imprimo cada numero
+        }
+
+        printf("\n");
+    }
+}
+/*
+  =========================
   ind_in_string:
   busca la primera ocurrencia de needle en haystack
   parametros:
@@ -566,7 +577,7 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
       needle: cadena a buscar
   retorno:
       índice de la primera ocurrencia o -1 si no se encuentra
-========================
+=========================
 */
 int find_in_string(char *haystack, char *needle){
     int largo_haystack = strlen(haystack); //Guardo la longitud de haystack
@@ -590,14 +601,14 @@ int find_in_string(char *haystack, char *needle){
     return -1; 
 }
 /*
-========================
+  =========================
   string_to_caps:
   convierte una cadena a mayúsculas
   parametros:
       string: cadena a convertir
   retorno:
         no retorna nada, pero modifica la cadena original a mayúsculas y la imprime.
-========================
+=========================
 */
 void string_to_caps(char *string){
     int indice;//defino un indice que va a representar la posicion en el string
@@ -615,14 +626,14 @@ void string_to_caps(char *string){
     printf("%s", string);
 }
 /*
-========================
+  =========================
   string_to_mins:
   convierte una cadena a minúsculas
   parametros:
       string: cadena a convertir
   retorno:
         no retorna nada, pero modifica la cadena original a minúsculas y la imprime.
-========================
+=========================
 */
 void string_to_mins(char *string){
     int indice;//defino un indice que va a representar la posicion en el string
@@ -640,7 +651,7 @@ void string_to_mins(char *string){
     printf("%s", string);
 }
 /*
-========================
+  =========================
   complex_t *sum:
   suma dos números complejos
   parametros:
@@ -648,7 +659,7 @@ void string_to_mins(char *string){
       b: segundo número complejo
   retorno:
         puntero a un número complejo con el resultado de la suma
-========================
+=========================
 */
 complex_t *sum(complex_t a, complex_t b){
     complex_t *resultado = malloc(sizeof(complex_t));
@@ -657,7 +668,7 @@ complex_t *sum(complex_t a, complex_t b){
     return resultado;
 }
 /*
-========================
+  =========================
   complex_t *prod:
   multiplica dos números complejos
   parametros:
@@ -665,7 +676,7 @@ complex_t *sum(complex_t a, complex_t b){
       b: segundo número complejo
   retorno:
         puntero a un número complejo con el resultado de la multiplicación
-========================
+=========================
 */
 complex_t *prod(complex_t a, complex_t b){
     // (a+bi)*(c+di)=a*c + a*di + bi*c + bi*di (como resolver 
@@ -676,14 +687,14 @@ complex_t *prod(complex_t a, complex_t b){
     return resultado;
 }
 /*
-========================
+  =========================
   chequear_si_bisiesto(auxiliar de days_left):
   chequea si un año es bisiesto
   parametros:
       año: año a verificar
   retorno:
         1 si es bisiesto, 0 si no
-========================
+=========================
 */
 int chequear_si_bisiesto(int año){
     int bisiesto;//1 si es bisiesto, 0 si no;
@@ -695,7 +706,7 @@ int chequear_si_bisiesto(int año){
     return bisiesto;
 }
 /*
-========================
+  =========================
   largo_del_mes(auxiliar de days_left):
   calcula el largo de un mes dado su número y el año
   parametros:
@@ -704,7 +715,7 @@ int chequear_si_bisiesto(int año){
   (Segun el mes)
   retorno:
         cantidad de días en el mes
-========================
+=========================
 */
 int largo_del_mes(int month, int year){
     if (month==2){
@@ -720,14 +731,14 @@ int largo_del_mes(int month, int year){
     }
 }
 /*
-========================
+  =========================
   lo_que_va_del_año(auxiliar de days_left):
   calcula los días que han pasado desde el inicio del año hasta una fecha dada
   parametros:
       fecha: fecha a verificar
   retorno:
         cantidad de días que han pasado desde el inicio del año
-========================
+=========================
 */
 int lo_que_va_del_año(date_t fecha){
     int dias=0;
@@ -739,7 +750,7 @@ int lo_que_va_del_año(date_t fecha){
     return dias;
 }
 /*
-========================
+  =========================
   days_left:
   Uso de lo_que_va_del_año y chequear_si_bisiesto.
   calcula los días que faltan entre dos fechas
@@ -748,7 +759,7 @@ int lo_que_va_del_año(date_t fecha){
       finish: fecha de finalización
   retorno:
         cantidad de días entre las dos fechas, o un número negativo si la fecha de inicio es mayor a la fecha de finalización
-========================
+=========================
 */
 int days_left(date_t start, date_t finish){
     int start_mayor_a_finish=0;
