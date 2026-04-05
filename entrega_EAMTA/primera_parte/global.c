@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 int find_in_string(char *haystack, char *needle){
     int largo_haystack = strlen(haystack); //Guardo la longitud de haystack
@@ -40,7 +41,7 @@ void string_to_caps(char *string){
             }
         }    
     }
-    printf("%s", string);
+    printf("%s\n", string);
 }
 
 void string_to_mins(char *string){
@@ -56,7 +57,7 @@ void string_to_mins(char *string){
             }
         }
     }
-    printf("%s", string);
+    printf("%s\n", string);
 }
 
 complex_t *sum(complex_t a, complex_t b){

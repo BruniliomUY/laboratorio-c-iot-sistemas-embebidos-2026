@@ -1,5 +1,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
+#include <stdint.h>
 
 typedef struct { //defino la estructura de un numero imaginario
     int32_t real;
