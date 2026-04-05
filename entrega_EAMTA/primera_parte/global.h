@@ -51,6 +51,8 @@ void print_complex_t(complex_t c);
 
 void print_date_t(date_t date);
 
+void print_matriz_t(matriz_t matriz);
+
 void init_lab(void); //Imprime los nombres de los integrantes del grupo. 
 
 root_t* eq_solver(coeff_t *coeficientes ); //Recibe un arreglo de coeficientes y devuelve un arreglo con las raíces de la ecuación.

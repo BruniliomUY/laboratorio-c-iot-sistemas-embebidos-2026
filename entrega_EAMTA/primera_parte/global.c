@@ -142,6 +142,11 @@ void init_lab(void)
 */
 root_t* eq_solver(coeff_t *coeficientes) {
     root_t *solucion = malloc(sizeof(root_t));  // Asignamos var local para almacenar la solución
+
+    if (solucion == NULL)
+    {
+        return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
+    }
     
     double a = (double)coeficientes->a; // Convertimos a double para mayor precisión en el cálculo intermedio
     double b = (double)coeficientes->b;
@@ -295,8 +300,33 @@ matriz_t *matrix_sub (matriz_t A,matriz_t B){
     }
  
 	matriz_t *matriz_resultado = malloc(sizeof(matriz_t)); //Asignamos memoria para la matriz resultado.
+   
+    if (matriz_resultado == NULL)
+    {
+        return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
+    }   
+
     matriz_resultado->rows = n_filas;
     matriz_resultado->cols = n_columna;
+
+    matriz_resultado->data = malloc(A.rows * sizeof(int16_t *));//Asignamos memoria para las filas de la matriz resultado.
+    if (matriz_resultado->data == NULL) {
+        free(matriz_resultado);
+        return NULL;
+    }
+
+    for (size_t i = 0; i < A.rows; i++) {
+        matriz_resultado->data[i] = malloc(A.cols * sizeof(int16_t));
+        if (matriz_resultado->data[i] == NULL) {
+            // Si falla, liberar toda la memoria previa para evitar "leaks" [cite: 109]
+            for (size_t k = 0; k < i; k++) {
+                free(matriz_resultado->data[k]);
+            }
+            free(matriz_resultado->data);
+            free(matriz_resultado);
+            return NULL;
+        }
+    }
     
 	for (int i = 0; i < n_filas; i++) {  //Recorremos las 2 matrices y las restamos con 2 for anidados.
 		for (int j = 0; j < n_columna; j++) {

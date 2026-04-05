@@ -6,9 +6,9 @@ int main() {
     
     //prueba_eq_solver
     coeff_t coef = {1, -5, 3};                // Coeficientes de la ecuación x^2 - 5x + 3 = 0
+    print_coeff_t(coef);
     root_t* solucion = eq_solver(&coef);
-    printf("Raíz 1: %d + %di\n", solucion->real1, solucion->imag1);
-    printf("Raíz 2: %d + %di\n", solucion->real2, solucion->imag2);
+    print_root_t(*solucion);
     void free(void *solucion); // Función para liberar la memoria asignada a la solución.
 
     //prueba_bin2dec
@@ -16,7 +16,7 @@ int main() {
     int32_t decimal = bin2dec(binary, false);
     printf("Binario: %s, Decimal: %d\n", binary, decimal);
 
-    //prueba_print_reverse_array(void *array,size_t data_type,size_t array_size)
+    //prueba_print_reverse_array
     char *array[] = {"Hola", "Mundo", "C", "IoT"};
     size_t array_size = sizeof(array) / sizeof(array[0]); 
     print_reverse_array((void *)array, sizeof(char *), array_size);
@@ -28,11 +28,10 @@ int main() {
 
     //prueba_min_index
     min_index(array_1, sizeof(int32_t), array_size_1);
-    return 0;
-    
+
     //prueba_matrix_sub
-    int16_t **m1;
-    int16_t **m2;
+    int16_t **m1 = malloc(2 * sizeof(int16_t*));
+    int16_t **m2 = malloc(2 * sizeof(int16_t*));
     m1 = malloc(2 * sizeof(int16_t*));       //Crea las filas
     
     for (int i = 0; i < 2; i++) {            //Crea las columnas para cada fila
@@ -55,13 +54,11 @@ int main() {
     matriz_t A = {m1, 2, 2};
     matriz_t B = {m2, 2, 2};
     matriz_t *resultado = matrix_sub(A, B);
-    for (size_t i = 0; i < resultado->rows; i++) {
-        for (size_t j = 0; j < resultado->cols; j++) {
-            printf("%d ", resultado->data[i][j]);
-        }
-        printf("\n");
-
+    print_matriz_t(*resultado);
+    for (int i = 0; i < 2; i++) {
+        free(m1[i]);
+        free(m2[i]);
     }
-    void free(void *m1);
-    void free(void *m2);
+    free(m1);
+    free(m2);
 }
