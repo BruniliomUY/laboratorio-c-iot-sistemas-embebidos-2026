@@ -87,14 +87,13 @@ root_t* eq_solver(coeff_t *coeficientes) {
 int32_t bin2dec(char *binary,bool sign) {
     int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
     size_t len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
-
     for (int i = 0; i < len; i++) {                        //Iteramos para calcular el valor de cada digito.
         if (binary[i] == '1') {              
             num_dec = num_dec + pow(2, len - 1 - i); //Desplazamos el puntero y sumamos la potencia de 2 correspondiente al encontrar un 1.
         }
     }
     if (sign && binary[0] == '1') {                       //Unsigned o Signed.
-        num_dec = -num_dec;
+        num_dec = -num_dec + pow(2, len - 1); //Si es con signo y el primer dígito es 1, ajustamos el resultado para representar el número negativo
     }
     return num_dec;
 }

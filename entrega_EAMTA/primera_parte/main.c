@@ -69,11 +69,11 @@ int main() {
     printf("%d\n", find_in_string("Nicolas", "as"));
     
     //prueba de string_to_caps
-    char string_a_convertir_a_caps[]= "Hola mundo, soy nico, EsToy PRoba&nDO que eSTO N0 S3 R0MP4";
+    char string_a_convertir_a_caps[]= "Hola mundo, soy nico, EsToy PRoba&nDO que eSTO N0 S3 R0MP4\n";
     string_to_caps(string_a_convertir_a_caps);
 
     //prueba de string_to_mins
-    char string_a_convertir_a_mins[]= "Hola mundo, soy nico, EsToy PRoba&nDO que eSTO N0 S3 R0MP4";
+    char string_a_convertir_a_mins[]= "Hola mundo, soy nico, EsToy PRoba&nDO que eSTO N0 S3 R0MP4\n";
     string_to_mins(string_a_convertir_a_mins);
 
     //prueba de sum
