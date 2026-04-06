@@ -153,6 +153,9 @@ int main(){
                 printf("Hubo un problema al liberar la lista.\n");
             }
             return 0;
+        }else{
+            printf("Valor invalido");
+                return -1;
         }
     }
 }
