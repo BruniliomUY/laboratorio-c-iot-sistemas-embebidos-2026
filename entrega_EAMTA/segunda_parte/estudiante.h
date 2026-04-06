@@ -107,13 +107,6 @@ void ordenar_por_ci(nodo_t *cabeza);
 
 /*
 =========================
-    Devuelve la letra correspondiente al promedio.
-=========================
-*/
-char * letra_calificacion(float promedio);
-
-/*
-=========================
     Muestra cada estudiante con su letra de calificacion.
 =========================
 */
