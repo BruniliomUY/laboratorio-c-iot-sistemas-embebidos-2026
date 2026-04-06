@@ -126,6 +126,7 @@ int eliminar_estudiante(nodo_t **cabeza,uint32_t ci){
     
     // Liberamos la memoria para evitar fugas (memory leaks)
     free(ptr);
+    return 0;
     }
 /*
 =========================
