@@ -212,7 +212,7 @@ matriz_t *matrix_sub (matriz_t A,matriz_t B){
     for (size_t i = 0; i < A.rows; i++) {
         matriz_resultado->data[i] = malloc(A.cols * sizeof(int16_t));
         if (matriz_resultado->data[i] == NULL) {
-            // Si falla, liberar toda la memoria previa para evitar "leaks" [cite: 109]
+            // Si falla, liberar toda la memoria previa para evitar "leaks"
             for (size_t k = 0; k < i; k++) {
                 free(matriz_resultado->data[k]);
             }
