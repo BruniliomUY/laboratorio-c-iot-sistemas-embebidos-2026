@@ -303,9 +303,9 @@ int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para 
 
     for (int i = 0; i < data_type; i++)
     {
-        temp = a[i];//como a es un puntero,a[i] accede al byte numero i del dato y lo cambia con el mismo numero de byte de b 
-        a[i] = b[i];
-        b[i] = temp;
+        temp = *(a + i);//como a es un puntero,a[i] accede al byte numero i del dato y lo cambia con el mismo numero de byte de b 
+        *(a + i) = *(b + i);
+        *(b + i) = temp;
     }
 
     return 0;
