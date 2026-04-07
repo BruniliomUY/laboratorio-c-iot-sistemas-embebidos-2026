@@ -132,12 +132,12 @@ void print_reverse_array(void *array,size_t data_type,size_t array_size) {
 */
 void max_index(void *array, size_t data_type, size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
-    int32_t max_val = *(int32_t *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
+    int max_val = *(int *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
     int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
              
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
-        int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
-        int32_t  valor_actual = *val_ptr;
+        int *val_ptr = (int *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
+        int  valor_actual = *val_ptr;
         if (valor_actual > max_val) {                          //Almacenamos si el valor actual es mayor que el max anterior.
             max_val = valor_actual;
             max_indx = i;                                      //Almacenamos el indice del nuevo valor máximo.
@@ -160,12 +160,12 @@ void max_index(void *array, size_t data_type, size_t array_size) {
 */
 void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
     uint8_t *pa = (uint8_t *)array;                            
-    int32_t min_val = *(int32_t *)pa;                          
+    int min_val = *(int *)pa;                          
     int  min_indx = 0;                                         
 
     for (size_t i = 1; i < array_size; i++){                    
-        int32_t *val_ptr = (int32_t *)(pa + (i * data_type));  
-        int32_t  valor_actual = *val_ptr;                       
+        int *val_ptr = (int *)(pa + (i * data_type));  
+        int  valor_actual = *val_ptr;                       
         if (valor_actual < min_val) {
             min_val = valor_actual;
             min_indx = i;

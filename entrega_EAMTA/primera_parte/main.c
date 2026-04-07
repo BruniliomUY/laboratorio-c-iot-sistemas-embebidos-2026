@@ -13,7 +13,7 @@ int main() {
 
     //prueba_bin2dec
     char binary[] = "1010";
-    int32_t decimal = bin2dec(binary, false);
+    int decimal = bin2dec(binary, false);
     printf("Binario: %s, Decimal: %d\n", binary, decimal);
 
     //prueba_print_reverse_array
@@ -22,9 +22,9 @@ int main() {
     print_reverse_array((void *)array, sizeof(char *), array_size);
 
     //prueba_max_index
-    int32_t array_1[] = {1, 5, 3, 9, 2};
+    int array_1[] = {1, 5, 3, 9, 2};
     size_t array_size_1 = sizeof(array) / sizeof(array[0]);
-    max_index(array_1, sizeof(int32_t), array_size_1);
+    max_index(array_1, sizeof(int), array_size_1);
 
     //prueba_min_index
     min_index(array_1, sizeof(int32_t), array_size_1);
