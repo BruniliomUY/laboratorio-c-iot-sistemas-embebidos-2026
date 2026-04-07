@@ -324,7 +324,7 @@ int vocales(char *string)
 {
     int contador = 0;
 
-    char *vocales = "aeiouAEIOUáéíóúÁÉÍÓÚ";
+    char *vocales = "aeiouAEIOU";
 
     if (string == NULL)
     {
