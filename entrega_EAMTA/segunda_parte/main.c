@@ -17,7 +17,7 @@ int main(){
 
     
     if (insertar_estudiante(&cabeza, e1) == 0)
-        printf("Se inserto a Victoria Amor.\n");
+        printf("Se insert3o a Victoria Amor.\n");
     else
         printf("Error al insertar a Victoria Amor.\n");
 
