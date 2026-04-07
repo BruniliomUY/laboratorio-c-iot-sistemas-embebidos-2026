@@ -78,9 +78,9 @@ root_t* eq_solver(coeff_t *coeficientes) {
         return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
     }
     
-    double a = (double)coeficientes->a; // Convertimos a double para mayor precisión en el cálculo intermedio
-    double b = (double)coeficientes->b;
-    double c = (double)coeficientes->c;
+    double a = coeficientes->a; // Convertimos a double para mayor precisión en el cálculo intermedio
+    double b = coeficientes->b;
+    double c = coeficientes->c;
 
 	double discriminante = b*b - 4*a*c;// Calculamos el discriminante.
 
@@ -88,21 +88,21 @@ root_t* eq_solver(coeff_t *coeficientes) {
 	if (discriminante > 0) {
         double x1 = (-b + sqrt(discriminante)) / (2.0 * a);          // Calculamos la primera raíz usando el método de Bhaskara.
 	    double x2 = (-b - sqrt(discriminante)) / (2.0 * a);          // Calculamos la segunda raíz usando el método de Bhaskara.
-        solucion->real1 = (int32_t)x1;                                 //  Se usa -> por que es a lo que apunta soulcion dentro de el espacio de está asignada la memoria para almacenar la solución.
+        solucion->real1 = x1;                                 //  Se usa -> por que es a lo que apunta soulcion dentro de el espacio de está asignada la memoria para almacenar la solución.
         solucion->imag1 = 0;
-        solucion->real2 = (int32_t)x2;
+        solucion->real2 = x2;
         solucion->imag2 = 0;
         solucion->complex = false;
 	} else if (discriminante < 0) {
-		solucion->real1 = (int32_t)(-b / (2.0 * a));
-        solucion->imag1 = (int32_t)(sqrt(-discriminante) / (2.0 * a));
-        solucion->real2 = (int32_t)(-b / (2.0 * a));
-        solucion->imag2 = (int32_t)(-sqrt(-discriminante) / (2.0 * a));
+		solucion->real1 = (-b / (2.0 * a));
+        solucion->imag1 = (sqrt(-discriminante) / (2.0 * a));
+        solucion->real2 = (-b / (2.0 * a));
+        solucion->imag2 = (-sqrt(-discriminante) / (2.0 * a));
         solucion->complex = true;
 	} else {
-		solucion->real1 = (int32_t)(-b / (2.0 * a));
+		solucion->real1 = (-b / (2.0 * a));
         solucion->imag1 = 0;
-        solucion->real2 = (int32_t)(-b / (2.0 * a));
+        solucion->real2 = (-b / (2.0 * a));
         solucion->imag2 = 0;
         solucion->complex = false;
 	}
@@ -235,9 +235,11 @@ int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a ma
 =========================
 */
 matriz_t *matrix_sub (matriz_t A,matriz_t B){
+    if (A.rows < 0 || A.cols < 0 || B.cols < 0 || B.rows < 0 ) {
+        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
+    }
     size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
     size_t n_columna = A.cols;
-
     if (n_filas != B.rows || n_columna != B.cols) {
         return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
     }
@@ -775,9 +777,9 @@ complex_t *prod(complex_t a, complex_t b){
         1 si es bisiesto, 0 si no
 =========================
 */
-int chequear_si_bisiesto(int año){
+int chequear_si_bisiesto(int anio){
     int bisiesto;//1 si es bisiesto, 0 si no;
-    if (año % 4==0 && año %100 !=0 || año %400 == 0){
+    if (anio % 4==0 && anio %100 !=0 || anio %400 == 0){
         bisiesto=1;
     }else{
         bisiesto=0;
@@ -819,7 +821,7 @@ int largo_del_mes(int month, int year){
         cantidad de días que han pasado desde el inicio del año
 =========================
 */
-int lo_que_va_del_año(date_t fecha){
+int lo_que_va_del_anio(date_t fecha){
     int dias=0;
     int i;
     for (i=1;i<fecha.month;i++){
@@ -855,7 +857,7 @@ int days_left(date_t start, date_t finish){
     int i=0;
     int dias=0;
         if (start.year==finish.year){ //si ambos años son los mismos, calculo los dias que pasaron
-        dias= lo_que_va_del_año(finish)-lo_que_va_del_año(start);
+        dias= lo_que_va_del_anio(finish)-lo_que_va_del_anio(start);
     }else{
     for(i=start.year;i<finish.year;i++){ //creo un indice que va desde el año menor
         //al año mayor, revisando si es bisiesto o no, y sumando los dias acordes 
@@ -866,7 +868,7 @@ int days_left(date_t start, date_t finish){
         }
     }
     //resto los dias que ya pasaron del año de inicio, y sumo los dias que pasaron del año de finalización
-    dias=dias-(lo_que_va_del_año(start))+(lo_que_va_del_año(finish));
+    dias=dias-(lo_que_va_del_anio(start))+(lo_que_va_del_anio(finish));
     if (start_mayor_a_finish==1){ //si la fecha de inicio era mayor a la de finalización, el resultado es negativo
         dias=-dias;
     }

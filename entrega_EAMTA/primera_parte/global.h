@@ -35,10 +35,10 @@ typedef struct { //Coeficientes de la ecuación de segundo grado.
 } coeff_t; 
 
 typedef struct {
-    int32_t  real1;   //Parte real de la primera raíz.    
-    int32_t  imag1;   //Parte imaginaria de la primera raíz.
-    int32_t  real2;   //Parte real de la segunda raíz.
-    int32_t  imag2;   //Parte imaginaria de la segunda raíz.
+    double  real1;   //Parte real de la primera raíz.    
+    double  imag1;   //Parte imaginaria de la primera raíz.
+    double  real2;   //Parte real de la segunda raíz.
+    double  imag2;   //Parte imaginaria de la segunda raíz.
     bool     complex; //Indica si las raíces son complejas o reales.
 } root_t; //Estructura para representar una raíz compleja.
 
@@ -105,11 +105,11 @@ complex_t *sum(complex_t a, complex_t b);
 
 complex_t *prod(complex_t a, complex_t b);
 
-int chequear_si_bisiesto(int año);
+int chequear_si_bisiesto(int anio);
 
 int largo_del_mes(int month, int year);
 
-int lo_que_va_del_año(date_t fecha);
+int lo_que_va_del_anio(date_t fecha);
 
 int days_left(date_t start, date_t finish);
 
