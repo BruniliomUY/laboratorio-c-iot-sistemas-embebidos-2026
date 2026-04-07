@@ -149,7 +149,7 @@ void print_reverse_array(void *array,data_type_t type,size_t array_size) {
     printf("Array en orden inverso:\n{");   //Marca el inicio de el array invertido.
     for (int i = array_size - 1; i >= 0; i--) {    //Iteramos el array restando 1 al indice.
         uint8_t *actual = pa + (i * get_size(type));    //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
-         print_element(*(char **)actual,  type);  //Imprimimos el valor del elemento actual teniendo en cuenta que es un char si es otra cosa ocurrica un ERROR.
+         print_element(actual,  type);  //Imprimimos el valor del elemento actual teniendo en cuenta que es un char si es otra cosa ocurrica un ERROR.
     }
     printf("}\n");
     }
