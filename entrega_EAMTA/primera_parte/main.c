@@ -125,7 +125,7 @@ int main() {
 
     //prueba de string_to_mins
     char string_a_convertir_a_mins[]= "Hola mundo, soy nico, EsToy PRoba&nDO que eSTO N0 S3 R0MP4\n";
-    string_to_mins(string_a_convertir_a_mins);
+    string_to_min(string_a_convertir_a_mins);
 
     //prueba de sum
     complex_t a_c = {1, 2};

@@ -10,6 +10,7 @@
 size_t get_size(data_type_t type) {
     switch(type) {
         case TYPE_INT32: return sizeof(int32_t);
+        case TYPE_INT8: return sizeof(int8_t);
         case TYPE_UINT32: return sizeof(uint32_t);
         case TYPE_FLOAT: return sizeof(float);
         case TYPE_DOUBLE: return sizeof(double);
@@ -23,6 +24,9 @@ void print_element(void *elem, data_type_t type) {
     switch(type) {
         case TYPE_INT32:
             printf("%d", *(int32_t *)elem);
+            break;
+        case TYPE_INT8:
+            printf("%d", *(int8_t *)elem);
             break;
         case TYPE_FLOAT:
             printf("%f", *(float *)elem);
