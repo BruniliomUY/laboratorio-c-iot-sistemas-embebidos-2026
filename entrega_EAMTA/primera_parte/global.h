@@ -8,6 +8,7 @@
    1. TIPOS DE DATOS 
    ========================================== */
 typedef enum {
+    TYPE_INT8,
     TYPE_INT32,
     TYPE_UINT32,
     TYPE_FLOAT,
@@ -98,7 +99,7 @@ int find_in_string(char *haystack, char *needle);
 
 void string_to_caps(char *string);
 
-void string_to_mins(char *string);
+void string_to_min(char *string);
 
 complex_t *sum(complex_t a, complex_t b);
 

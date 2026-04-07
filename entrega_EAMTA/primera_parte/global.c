@@ -707,7 +707,7 @@ void string_to_caps(char *string){
         no retorna nada, pero modifica la cadena original a minúsculas y la imprime.
 =========================
 */
-void string_to_mins(char *string){
+void string_to_min(char *string){
     int indice;//defino un indice que va a representar la posicion en el string
     //inicio un bucle for que termina cuando se encuentra '\0'
     char mayus[]= "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
