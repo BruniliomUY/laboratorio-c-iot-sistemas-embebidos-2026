@@ -7,6 +7,15 @@
 /* ==========================================
    1. TIPOS DE DATOS 
    ========================================== */
+typedef enum {
+    TYPE_INT32,
+    TYPE_UINT32,
+    TYPE_FLOAT,
+    TYPE_DOUBLE,
+    TYPE_CHAR,
+    TYPE_STRING
+} data_type_t;
+
 typedef struct {  //defino la estructura de un numero imaginario
     int32_t real; //Parte real del número complejo.
     int32_t imag; //Parte imaginaria del número complejo.
@@ -43,6 +52,10 @@ typedef struct {
 /* ==========================================
    2. PROTOTIPOS DE FUNCIONES 
    ========================================== */
+void print_element(void *elem, data_type_t type);
+
+size_t get_size(data_type_t type);
+
 void print_coeff_t(coeff_t coef);
 
 void print_root_t(root_t root);
@@ -59,11 +72,11 @@ root_t* eq_solver(coeff_t *coeficientes ); //Recibe un arreglo de coeficientes y
 
 int32_t bin2dec(char *binary,bool sign);  //Recibe un número binario en formato string y un booleano que indica si el número es con signo o sin signo, y devuelve su equivalente en decimal.
 
-void print_reverse_array(void *array,size_t data_type,size_t array_size); //Imprime el array en orden inverso usando puntero genérico.
+void print_reverse_array(void *array,data_type_t type,size_t array_size); //Imprime el array en orden inverso usando puntero genérico.
 
-void max_index(void *array, size_t data_type, size_t array_size); //Imprime el índice y valor máximo del array.
+int max_index(void *array, data_type_t type, size_t array_size); //Imprime el índice y valor máximo del array.
 
-void min_index(void *array, size_t data_type, size_t array_size); //Imprime el índice y valor mínimo del array.
+int min_index(void *array, data_type_t type, size_t array_size); //Imprime el índice y valor mínimo del array.
 
 matriz_t* matrix_sub (matriz_t A,matriz_t B); //Recibe dos matrices A y B, y devuelve la matriz resultante de restar B a A.
 

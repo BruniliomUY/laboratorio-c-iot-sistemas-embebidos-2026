@@ -5,6 +5,37 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+
+size_t get_size(data_type_t type) {
+    switch(type) {
+        case TYPE_INT32: return sizeof(int32_t);
+        case TYPE_UINT32: return sizeof(uint32_t);
+        case TYPE_FLOAT: return sizeof(float);
+        case TYPE_DOUBLE: return sizeof(double);
+        case TYPE_CHAR: return sizeof(char);
+        case TYPE_STRING: return sizeof(char *);
+    }
+    return 0;
+}
+
+void print_element(void *elem, data_type_t type) {
+    switch(type) {
+        case TYPE_INT32:
+            printf("%d", *(int32_t *)elem);
+            break;
+        case TYPE_FLOAT:
+            printf("%f", *(float *)elem);
+            break;
+        case TYPE_CHAR:
+            printf("%c", *(char *)elem);
+            break;
+        case TYPE_STRING:
+            printf("%s", *(char **)elem);
+            break;
+    }
+}
+
 /*
 =========================
   init_lab:
@@ -109,12 +140,12 @@ int32_t bin2dec(char *binary,bool sign) {
         no retorna nada, pero imprime los elementos del array en orden inverso
 =========================
 */
-void print_reverse_array(void *array,size_t data_type,size_t array_size) {
+void print_reverse_array(void *array,data_type_t type,size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                 //Puntero generico que recorre el array por byte. 
     printf("Array en orden inverso:\n{");   //Marca el inicio de el array invertido.
     for (int i = array_size - 1; i >= 0; i--) {    //Iteramos el array restando 1 al indice.
-        uint8_t *actual = pa + (i * data_type);    //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
-        printf("%s", *(char **)actual);    //Imprimimos el valor del elemento actual teniendo en cuenta que es un char si es otra cosa ocurrica un ERROR.
+        uint8_t *actual = pa + (i * get_size(type));    //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
+         print_element(*(char **)actual,  type);  //Imprimimos el valor del elemento actual teniendo en cuenta que es un char si es otra cosa ocurrica un ERROR.
     }
     printf("}\n");
     }
@@ -130,21 +161,26 @@ void print_reverse_array(void *array,size_t data_type,size_t array_size) {
         no retorna nada, pero imprime el índice y el valor máximo encontrado
 =========================
 */
-void max_index(void *array, size_t data_type, size_t array_size) {
+int max_index(void *array, data_type_t type, size_t array_size) {
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
-    int max_val = *(int *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
+    int  max_val = *(int *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
     int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
-             
+    
+    if (array_size == 0 || array == NULL){
+        return -1;
+    };
+
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
-        int *val_ptr = (int *)(pa + (i * data_type));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
+        int *val_ptr = (int *)(pa + (i * get_size(type)));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
         int  valor_actual = *val_ptr;
         if (valor_actual > max_val) {                          //Almacenamos si el valor actual es mayor que el max anterior.
             max_val = valor_actual;
             max_indx = i;                                      //Almacenamos el indice del nuevo valor máximo.
         }
       }
-        printf("Indice max: %d\n", max_indx);           //Imprimimos el indice del valor máximo encontrado.
-        printf("Valor max: %d\n", max_val);            //Imprimimos el valor máximo encontrado %d para int32_t.
+        print_element(&max_indx,  type);                   //Imprimimos el indice del valor máximo encontrado.
+        print_element(&max_val,  type);  
+        return max_indx;                                        //Imprimimos el valor máximo encontrado %d para int32_t.
     }
 /*
 =========================
@@ -158,22 +194,28 @@ void max_index(void *array, size_t data_type, size_t array_size) {
         no retorna nada, pero imprime el índice y el valor mínimo encontrado
 =========================
 */
-void min_index(void *array, size_t data_type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
+int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
     uint8_t *pa = (uint8_t *)array;                            
-    int min_val = *(int *)pa;                          
+    int  min_val = *(int *)pa;                          
     int  min_indx = 0;                                         
 
+    if (array_size == 0 || array == NULL){
+        return -1;
+    };
+
     for (size_t i = 1; i < array_size; i++){                    
-        int *val_ptr = (int *)(pa + (i * data_type));  
+        int *val_ptr = (int *)(pa + (i * get_size(type)));  
         int  valor_actual = *val_ptr;                       
         if (valor_actual < min_val) {
             min_val = valor_actual;
             min_indx = i;
         }
       }
-        printf("Indice min: %d\n", min_indx);
-        printf("Valor min: %d\n", min_val);
+        print_element(&min_indx,  type);                   //Imprimimos el indice del valor máximo encontrado.
+        print_element(&min_val,  type);                 //Imprimimos el valor máximo encontrado %d para int32_t.
+        return min_indx;  
     }
+
 /*
 =========================
   matriz_t *matrix_sub:
