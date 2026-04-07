@@ -310,6 +310,7 @@ int consonantes(char *string)
     return contador;
 }
 
+
 /*
 =========================
   vocales:
@@ -351,7 +352,7 @@ int vocales(char *string)
         string++;
     }
 
-    return contador;
+    return contador; //No se tiene en cuenta las vocales con tilde.
 }
 
 /*
