@@ -166,14 +166,13 @@ void print_reverse_array(void *array,data_type_t type,size_t array_size) {
 =========================
 */
 int max_index(void *array, data_type_t type, size_t array_size) {
+    if (array_size == 0 || array == NULL){
+        return -1;
+    };
     uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
     int  max_val = *(int *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
     int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
     
-    if (array_size == 0 || array == NULL){
-        return -1;
-    };
-
     for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
         int *val_ptr = (int *)(pa + (i * get_size(type)));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
         int  valor_actual = *val_ptr;
@@ -199,6 +198,10 @@ int max_index(void *array, data_type_t type, size_t array_size) {
 =========================
 */
 int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
+    if (array_size == 0 || array == NULL){
+        return -1;
+    };
+
     uint8_t *pa = (uint8_t *)array;                            
     int  min_val = *(int *)pa;                          
     int  min_indx = 0;                                         
