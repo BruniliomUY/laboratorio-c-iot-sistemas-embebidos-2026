@@ -128,7 +128,7 @@ int32_t bin2dec(char *binary,bool sign) {
         }
     }
     if (sign && binary[0] == '1') {                       //Unsigned o Signed.
-        num_dec = -num_dec + pow(2, len - 1); //Si es con signo y el primer dígito es 1, ajustamos el resultado para representar el número negativo
+        num_dec = num_dec - (int32_t)pow(2, len); //Si es con signo y el primer dígito es 1, ajustamos el resultado para representar el número negativo en complemento a 2
     }
     return num_dec;
 }
@@ -166,25 +166,93 @@ void print_reverse_array(void *array,data_type_t type,size_t array_size) {
 =========================
 */
 int max_index(void *array, data_type_t type, size_t array_size) {
-    if (array_size == 0 || array == NULL){
-        return -1;
-    };
-    uint8_t *pa = (uint8_t *)array;                            //Puntero generico que recorre el array por byte. 
-    int  max_val = *(int *)pa;                          //Inicializamos el valor máximo con el primer elemento del array.
-    int  max_indx = 0;                                     //Definimos variable para almacenar el indice.
-    
-    for (size_t i = 1; i < array_size; i++){                   //Interamos para recorrer el array y comparar.       
-        int *val_ptr = (int *)(pa + (i * get_size(type)));  //Calculamos la dirección del elemento actual teniendo en cuenta el tamaño del tipo de dato.
-        int  valor_actual = *val_ptr;
-        if (valor_actual > max_val) {                          //Almacenamos si el valor actual es mayor que el max anterior.
-            max_val = valor_actual;
-            max_indx = i;                                      //Almacenamos el indice del nuevo valor máximo.
-        }
-      }
-        print_element(&max_indx,  type);                   //Imprimimos el indice del valor máximo encontrado.
-        print_element(&max_val,  type);  
-        return max_indx;                                        //Imprimimos el valor máximo encontrado %d para int32_t.
+    if (array == NULL || array_size == 0) {
+        return -1;//si el puntero no apunta a una direccion valida o la array tiene un tama;o de 0 hubo error.Se retorna -1
     }
+
+    uint8_t *pa = (uint8_t *)array;//para irse moviendo de a bytes se castea el puntero void * array a unit8_t (es para aritmetica de punteros en bytes no segun ningun tipo de dato)
+    int max_indx = 0;//para guardar el numero del indice donde se encontro el maximo
+//antes se hacia int max_val = *(int *)pa; y eso rompia todo porque se forzaba a tratar el valor como un int cuando puede ser otro tipo de dato
+//en realidad hay que castear segun el tipo de dato para saber el tipo de dato de max_val y para sabe de a cuantos bytes moverse 
+    switch (type) {
+        case TYPE_INT8: {
+            int8_t max_val = *(int8_t *)pa; //se interpreta pa como un puntero de  int8_t los valores a los que apunta y se obtiene el valor al que apunta
+            for (size_t i = 1; i < array_size; i++) {//recorremos la array desde el indice 1 porque el 0 ya se uso como valor maximo inicial 
+                int8_t valor_actual = *(int8_t *)(pa + (i * get_size(type)));//vamos moviendo el puntero segun la cantidd de bytes que tenga el tipo de dato * i posicion segun array_size
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;//casteamos el i que es un size_t a un int para retornar el max_indx en int como pide la funcion
+                }
+            }
+            break;
+        }
+
+        case TYPE_INT32: {
+            int32_t max_val = *(int32_t *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                int32_t valor_actual = *(int32_t *)(pa +( i * get_size(type)));
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_UINT32: {
+            uint32_t max_val = *(uint32_t *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                uint32_t valor_actual = *(uint32_t *)(pa +(i * get_size(type)));
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_FLOAT: {
+            float max_val = *(float *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                float valor_actual = *(float *)(pa + (i * get_size(type)));
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_DOUBLE: {
+            double max_val = *(double *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                double valor_actual = *(double *)(pa + (i * get_size(type)));
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_CHAR: {
+            char max_val = *(char *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                char valor_actual = *(char *)(pa + (i * get_size(type)));
+                if (valor_actual > max_val) {
+                    max_val = valor_actual;
+                    max_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        default:
+            return -1;
+    }
+
+    return max_indx;
+}
 /*
 =========================
   min_index:
@@ -197,32 +265,93 @@ int max_index(void *array, data_type_t type, size_t array_size) {
         no retorna nada, pero imprime el índice y el valor mínimo encontrado
 =========================
 */
-int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a max_index pero para encontrar el valor mínimo y su indice.
-    if (array_size == 0 || array == NULL){
+int min_index(void *array, data_type_t type, size_t array_size) {
+    if (array == NULL || array_size == 0) {
         return -1;
-    };
-
-    uint8_t *pa = (uint8_t *)array;                            
-    int  min_val = *(int *)pa;                          
-    int  min_indx = 0;                                         
-
-    if (array_size == 0 || array == NULL){
-        return -1;
-    };
-
-    for (size_t i = 1; i < array_size; i++){                    
-        int *val_ptr = (int *)(pa + (i * get_size(type)));  
-        int  valor_actual = *val_ptr;                       
-        if (valor_actual < min_val) {
-            min_val = valor_actual;
-            min_indx = i;
-        }
-      }
-        print_element(&min_indx,  type);                   //Imprimimos el indice del valor máximo encontrado.
-        print_element(&min_val,  type);                 //Imprimimos el valor máximo encontrado %d para int32_t.
-        return min_indx;  
     }
 
+    uint8_t *pa = (uint8_t *)array;
+    int min_indx = 0;
+
+    switch (type) {
+        case TYPE_INT8: {
+            int8_t min_val = *(int8_t *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                int8_t valor_actual = *(int8_t *)(pa + (i * get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_INT32: {
+            int32_t min_val = *(int32_t *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                int32_t valor_actual = *(int32_t *)(pa + (i * get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_UINT32: {
+            uint32_t min_val = *(uint32_t *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                uint32_t valor_actual = *(uint32_t *)(pa +( i * get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_FLOAT: {
+            float min_val = *(float *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                float valor_actual = *(float *)(pa + i * (get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_DOUBLE: {
+            double min_val = *(double *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                double valor_actual = *(double *)(pa + (i * get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        case TYPE_CHAR: {
+            char min_val = *(char *)pa;
+            for (size_t i = 1; i < array_size; i++) {
+                char valor_actual = *(char *)(pa +(i * get_size(type)));
+                if (valor_actual < min_val) {
+                    min_val = valor_actual;
+                    min_indx = (int)i;
+                }
+            }
+            break;
+        }
+
+        default:
+            return -1;
+    }
+
+    return min_indx;
+}
 /*
 =========================
   matriz_t *matrix_sub:
@@ -234,54 +363,38 @@ int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a ma
       puntero a la matriz resultado
 =========================
 */
-matriz_t *matrix_sub (matriz_t A,matriz_t B){
-    if (A.rows < 0 || A.cols < 0 || B.cols < 0 || B.rows < 0 ) {
-        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
-    }
-    size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
-    size_t n_columna = A.cols;
-    if (n_filas != B.rows || n_columna != B.cols) {
-        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
-    }
- 
-	matriz_t *matriz_resultado = malloc(sizeof(matriz_t)); //Asignamos memoria para la matriz resultado.
-   
-    if (matriz_resultado == NULL)
-    {
-        return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
-    }   
+matriz_t *matrix_sub(matriz_t A, matriz_t B) {
+    if (A.rows == 0 || A.cols == 0 || A.rows != B.rows || A.cols != B.cols) {
+        return NULL;
+    }//Verificamos que no es matriz nula o sin dimension.
 
-    matriz_resultado->rows = n_filas;
-    matriz_resultado->cols = n_columna;
+    matriz_t *matriz_resultado = malloc(sizeof(matriz_t));
+    if (matriz_resultado == NULL){ 
+        return NULL;//si malloc fallo
+    }//Definicion y asignacion para el puntero de la matriz resultado.
+    matriz_resultado->rows = A.rows;
+    matriz_resultado->cols = A.cols;
 
-    matriz_resultado->data = malloc(A.rows * sizeof(int16_t *));//Asignamos memoria para las filas de la matriz resultado.
+
+    size_t total_elements = (size_t)A.rows * A.cols;
+    matriz_resultado->data = malloc(total_elements * sizeof(int16_t)); 
+    
     if (matriz_resultado->data == NULL) {
-        free(matriz_resultado);
+        free(matriz_resultado);//si malloc fallo
         return NULL;
     }
+//antes teniamos la matriz como data[i][j] con filas independinetes pero eso no es lo que hace el testbench
+    int16_t *dataA = (int16_t *)A.data;//en el test bench se trata a la matriz como un array de elementos de 16 bits continuos entonces hay que castear el puntero para que vea cada elemento como un numero no como una direccion (del comiendo de una fila) 
+    int16_t *dataB = (int16_t *)B.data;
+    int16_t *dataR = (int16_t *)matriz_resultado->data;
+    //Forzamos los punterdos dobles a simples
+    for (size_t i = 0; i < total_elements; i++) {
+        dataR[i] = dataA[i] - dataB[i];
+    }//Recorremos los valores 'de forma lineal'
 
-    for (size_t i = 0; i < A.rows; i++) {
-        matriz_resultado->data[i] = malloc(A.cols * sizeof(int16_t));
-        if (matriz_resultado->data[i] == NULL) {
-            // Si falla, liberar toda la memoria previa para evitar "leaks"
-            for (size_t k = 0; k < i; k++) {
-                free(matriz_resultado->data[k]);
-            }
-            free(matriz_resultado->data);
-            free(matriz_resultado);
-            return NULL;
-        }
-    }
-    
-	for (int i = 0; i < n_filas; i++) {  //Recorremos las 2 matrices y las restamos con 2 for anidados.
-		for (int j = 0; j < n_columna; j++) {
-			matriz_resultado->data[i][j] = A.data[i][j] - B.data[i][j];
-		}
-	}
-	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices
-}                                       //Importante liberar la memoria asignada.
+    return matriz_resultado;
+}                                      
  
-
 /*
  ========================= 
   swap:
@@ -621,11 +734,11 @@ void print_matriz_t(matriz_t matriz)
 {
     if (matriz.data == NULL)
     {
-        printf("Error: matriz.data es NULL\n");//si el puntero no apunta a un espacio de memoria valido osea si no hay matriz creada 
+        printf("Error: matriz.data es NULL\n");
         return;
     }
 
-    if (matriz.rows <= 0 || matriz.cols <= 0)
+    if (matriz.rows == 0 || matriz.cols == 0)//no puede ser menso a 0 proque size_t es sin singo 
     {
         printf("Error: dimensiones invalidas\n");
         return;
@@ -633,19 +746,17 @@ void print_matriz_t(matriz_t matriz)
 
     printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
 
-    for (int i = 0; i < matriz.rows; i++)// recorre filas
+    //reinterpretamos como array plano
+    int16_t *data = (int16_t *)matriz.data;
+
+    for (size_t i = 0; i < matriz.rows; i++) // filas
     {
-        if (matriz.data[i] == NULL)
+        for (size_t j = 0; j < matriz.cols; j++) // columnas
         {
-            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
-            return;
+            // indice lineal
+            size_t k = (i * matriz.cols ) + j;//salteas las filas anteriores con lo de adentro dle parentesis y te moves en tu fila con el + j 
+            printf("%d ", data[k]);
         }
-
-        for (int j = 0; j < matriz.cols; j++)// recorre columnas
-        {
-            printf("%d ", matriz.data[i][j]);// imprimo cada numero
-        }
-
         printf("\n");
     }
 }
