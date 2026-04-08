@@ -234,52 +234,38 @@ int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a ma
       puntero a la matriz resultado
 =========================
 */
-matriz_t *matrix_sub (matriz_t A,matriz_t B){
-    if (A.rows < 0 || A.cols < 0 || B.cols < 0 || B.rows < 0 ) {
-        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
-    }
-    size_t n_filas = A.rows;             //Definimos variables para almacenar el número de filas y columnas de las matrices A y B.
-    size_t n_columna = A.cols;
-    if (n_filas != B.rows || n_columna != B.cols) {
-        return NULL;              // Retorna error por que la resta de matrices solo es posible si ambas tienen la misma cantidad de filas y columnas.
-    }
  
-	matriz_t *matriz_resultado = malloc(sizeof(matriz_t)); //Asignamos memoria para la matriz resultado.
-   
-    if (matriz_resultado == NULL)
-    {
-        return NULL; // no hay memoria disponible,se aprendio de el video de lista enlazada que hace esta verificacion de si se reservo bien la memoria dinamica o no
-    }   
+matriz_t *matrix_sub(matriz_t A, matriz_t B) {
+    if (A.rows == 0 || A.cols == 0 || A.rows != B.rows || A.cols != B.cols) {
+        return NULL;
+    }//Verificamos que no es matriz nula o sin dimencion.
 
-    matriz_resultado->rows = n_filas;
-    matriz_resultado->cols = n_columna;
+    matriz_t *matriz_resultado = malloc(sizeof(matriz_t));
+    if (matriz_resultado == NULL){ 
+        return NULL;
+    }//Definicion y asignacion para el puntero de la matriz resultado.
+    matriz_resultado->rows = A.rows;
+    matriz_resultado->cols = A.cols;
 
-    matriz_resultado->data = malloc(A.rows * sizeof(int16_t *));//Asignamos memoria para las filas de la matriz resultado.
+
+    size_t total_elements = (size_t)A.rows * A.cols;
+    matriz_resultado->data = malloc(total_elements * sizeof(int16_t)); 
+    
     if (matriz_resultado->data == NULL) {
         free(matriz_resultado);
         return NULL;
     }
 
-    for (size_t i = 0; i < A.rows; i++) {
-        matriz_resultado->data[i] = malloc(A.cols * sizeof(int16_t));
-        if (matriz_resultado->data[i] == NULL) {
-            // Si falla, liberar toda la memoria previa para evitar "leaks"
-            for (size_t k = 0; k < i; k++) {
-                free(matriz_resultado->data[k]);
-            }
-            free(matriz_resultado->data);
-            free(matriz_resultado);
-            return NULL;
-        }
-    }
-    
-	for (int i = 0; i < n_filas; i++) {  //Recorremos las 2 matrices y las restamos con 2 for anidados.
-		for (int j = 0; j < n_columna; j++) {
-			matriz_resultado->data[i][j] = A.data[i][j] - B.data[i][j];
-		}
-	}
-	return matriz_resultado;            //Retornamos el resultado de la resta de las matrices
-}                                       //Importante liberar la memoria asignada.
+    int16_t *dataA = (int16_t *)A.data;
+    int16_t *dataB = (int16_t *)B.data;
+    int16_t *dataR = (int16_t *)matriz_resultado->data;
+    //Forzamos los punterdos dobles a simples
+    for (size_t i = 0; i < total_elements; i++) {
+        dataR[i] = dataA[i] - dataB[i];
+    }//Recorremos los valores'de forma lineal'
+
+    return matriz_resultado;
+}                                      
  
 
 /*
