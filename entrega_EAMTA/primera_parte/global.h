@@ -9,8 +9,8 @@
    ========================================== */
 typedef enum {
     TYPE_INT32,
-    TYPE_INT8,
     TYPE_UINT32,
+    TYPE_INT8,
     TYPE_FLOAT,
     TYPE_CHAR,
     TYPE_STRING,

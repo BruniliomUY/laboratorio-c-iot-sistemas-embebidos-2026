@@ -128,8 +128,7 @@ root_t* eq_solver(coeff_t *coeficientes) {
 */
 int32_t bin2dec(char *binary,bool sign) {
     int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
-    size_t len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
-    int aux;
+    int len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
     for (int i = 1; i < len; i++) {                        //Iteramos para calcular el valor de cada digito.
         if (binary[i] == '1') {              
             num_dec = num_dec + pow(2, len - 1 - i); //Desplazamos el puntero y sumamos la potencia de 2 correspondiente al encontrar un 1.
@@ -310,7 +309,7 @@ int swap(void *elem_1, void *elem_2, size_t data_type)//esto no esta hecho para 
     a = (char *)elem_1;//esto es un casteo para que a apunte a la misma direccion que elem_1 pero movineo el puntero de a bytes,con vpid *elem_ anda a saber de a cuantos bytes es el puntero original elem_
     b = (char *)elem_2;
 
-    for (int i = 0; i < data_type; i++)
+    for (size_t i = 0; i < data_type; i++)
     {
         temp = *(a + i);//como a es un puntero,a[i] accede al byte numero i del dato y lo cambia con el mismo numero de byte de b 
         *(a + i) = *(b + i);
@@ -573,7 +572,7 @@ void print_coeff_t(coeff_t coef)
 */
 void print_root_t(root_t root)
 {
-    printf("real1 = %f, imag1 = %f, real2 = %f, imag2 = %f, complex = %b\n",
+    printf("real1 = %f, imag1 = %f, real2 = %f, imag2 = %f, complex = %d\n",
            root.real1, root.imag1, root.real2, root.imag2, root.complex);
 }
 
@@ -633,15 +632,15 @@ void print_matriz_t(matriz_t matriz)
 
     printf("rows = %zu, cols = %zu\n", matriz.rows, matriz.cols);
 
-    for (int i = 0; i < matriz.rows; i++)// recorre filas
+    for (size_t i = 0; i < matriz.rows; i++)// recorre filas
     {
         if (matriz.data[i] == NULL)
         {
-            printf("Error: fila %d es NULL\n", i);//chequea que la fila i exista 
+            printf("Error: fila %ld es NULL\n", (i));//chequea que la fila i exista 
             return;
         }
 
-        for (int j = 0; j < matriz.cols; j++)// recorre columnas
+        for (size_t j = 0; j < matriz.cols; j++)// recorre columnas
         {
             printf("%d ", matriz.data[i][j]);// imprimo cada numero
         }
@@ -779,7 +778,7 @@ complex_t *prod(complex_t a, complex_t b){
 */
 int chequear_si_bisiesto(int anio){
     int bisiesto;//1 si es bisiesto, 0 si no;
-    if (anio % 4==0 && anio %100 !=0 || anio %400 == 0){
+    if ((anio % 4 == 0) & (anio %100 !=0) || anio %400 == 0){
         bisiesto=1;
     }else{
         bisiesto=0;
