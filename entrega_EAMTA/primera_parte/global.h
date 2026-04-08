@@ -8,13 +8,13 @@
    1. TIPOS DE DATOS 
    ========================================== */
 typedef enum {
-    TYPE_INT8,
     TYPE_INT32,
+    TYPE_INT8,
     TYPE_UINT32,
     TYPE_FLOAT,
-    TYPE_DOUBLE,
     TYPE_CHAR,
-    TYPE_STRING
+    TYPE_STRING,
+    TYPE_DOUBLE,
 } data_type_t;
 
 typedef struct {  //defino la estructura de un numero imaginario
@@ -29,9 +29,9 @@ typedef struct {
 } date_t;
 
 typedef struct { //Coeficientes de la ecuación de segundo grado.
-    int32_t  a;  //Coeficiente del término cuadrático.
-    int32_t  b;  //Coeficiente del término lineal.
-    int32_t  c;  //Coeficiente del término independiente.
+    double  a;  //Coeficiente del término cuadrático.
+    double  b;  //Coeficiente del término lineal.
+    double  c;  //Coeficiente del término independiente.
 } coeff_t; 
 
 typedef struct {

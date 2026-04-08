@@ -25,6 +25,9 @@ void print_element(void *elem, data_type_t type) {
         case TYPE_INT32:
             printf("%d", *(int32_t *)elem);
             break;
+        case TYPE_UINT32:
+            printf("%u", *(int32_t *)elem);
+            break;
         case TYPE_INT8:
             printf("%d", *(int8_t *)elem);
             break;
@@ -36,6 +39,9 @@ void print_element(void *elem, data_type_t type) {
             break;
         case TYPE_STRING:
             printf("%s", *(char **)elem);
+            break;
+        case TYPE_DOUBLE:
+            printf("%f", *(double *)elem);
             break;
     }
 }
@@ -122,16 +128,23 @@ root_t* eq_solver(coeff_t *coeficientes) {
 int32_t bin2dec(char *binary,bool sign) {
     int32_t num_dec = 0;                                   //Variable para almacenar el número decimal resultante.
     size_t len = strlen(binary);                        //Longitud del número binario para iterar sobre cada dígito.
-    for (int i = 0; i < len; i++) {                        //Iteramos para calcular el valor de cada digito.
+    int aux;
+    for (int i = 1; i < len; i++) {                        //Iteramos para calcular el valor de cada digito.
         if (binary[i] == '1') {              
             num_dec = num_dec + pow(2, len - 1 - i); //Desplazamos el puntero y sumamos la potencia de 2 correspondiente al encontrar un 1.
         }
     }
-    if (sign && binary[0] == '1') {                       //Unsigned o Signed.
-        num_dec = -num_dec + pow(2, len - 1); //Si es con signo y el primer dígito es 1, ajustamos el resultado para representar el número negativo
+    if (binary[0] == '1') {
+        if (sign) {
+            // En complemento a 2, el MSB tiene valor negativo: -(2^(n-1))
+            num_dec = num_dec - pow(2, len - 1);
+        } else {
+            // Si es unsigned, el MSB es positivo: +(2^(n-1))
+            num_dec =  num_dec +  pow(2, len - 1);
+        }
     }
     return num_dec;
-}
+    }
 /*
 =========================
   void print_reverse_array:
@@ -544,7 +557,7 @@ int string_copy(char *source, char *destination)//ojo esto no te asegura que el 
 */
 void print_coeff_t(coeff_t coef)
 {
-    printf("a = %d, b = %d, c = %d\n", coef.a, coef.b, coef.c);
+    printf("a = %f, b = %f, c = %f\n", coef.a, coef.b, coef.c);
 }
 
 /*
@@ -559,7 +572,7 @@ void print_coeff_t(coeff_t coef)
 */
 void print_root_t(root_t root)
 {
-    printf("real1 = %d, imag1 = %d, real2 = %d, imag2 = %d, complex = %d\n",
+    printf("real1 = %f, imag1 = %f, real2 = %f, imag2 = %f, complex = %b\n",
            root.real1, root.imag1, root.real2, root.imag2, root.complex);
 }
 
