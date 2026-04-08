@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 
 
@@ -572,7 +573,7 @@ void print_coeff_t(coeff_t coef)
 */
 void print_root_t(root_t root)
 {
-    printf("real1 = %f, imag1 = %f, real2 = %f, imag2 = %f, complex = %S\n",
+    printf("real1 = %f, imag1 = %f, real2 = %f, imag2 = %f, complex = %b\n",
            root.real1, root.imag1, root.real2, root.imag2, root.complex);
 }
 
