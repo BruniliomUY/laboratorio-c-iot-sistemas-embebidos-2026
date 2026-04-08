@@ -215,7 +215,7 @@ int min_index(void *array, data_type_t type, size_t array_size) { //Analoga a ma
         return -1;
     };
 
-    uint8_t *pa = (uint8_t *)array;                            
+    int8_t *pa = (int8_t *)array;                            
     int  min_val = *(int *)pa;                          
     int  min_indx = 0;                                         
 
